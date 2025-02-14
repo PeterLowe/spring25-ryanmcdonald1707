@@ -50,27 +50,31 @@ private:
 	void processMouseClick(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
-	
+
+	//UNIVERSAL FUNCTIONS
 	void updateGameState();
 	void setupFontAndText();
 	void setupSprite();
+	void getMousePos();
+	void checkButtons();
 
+	//FUNCTIONS FOR MENU
 	void setupMenu();
 	void drawMenu();
 
+	//FUNCTIONS FOR PREBATTLE
 	void setupPlayer();
+	void setupNPC();
+	void setupButtons();
 	void getDirection();
 	void move();
 	void checkbounds();
-
-	void getMousePos();
-	void checkButtons();
+	void interactWith();
+	void getCollision();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
 	sf::Text m_welcomeMessage; // text used for message on screen
-	sf::Texture m_logoTexture; // texture used for sfml logo
-	sf::Sprite m_logoSprite; // sprite used for sfml logo
 	bool m_exitGame; // control exiting game
 	bool click = false;
 	bool startHover = false;
@@ -79,7 +83,7 @@ private:
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosF;
 
-
+	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
 	sf::Text m_title;
 
 	sf::RectangleShape startButton;
@@ -92,12 +96,20 @@ private:
 	sf::Vector2f m_location;
 	float m_speed{ 1.6f };
 
-	//TEXTURES AND SPRITES FOR PREBATTLE
+	//TEXTURES, SPRITES AND VARIABLES FOR PREBATTLE
+	bool interactHover = false;
+	bool interactPressed = false;
+
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;
 
-	sf::RectangleShape m_playerBody;
+	sf::RectangleShape m_playerBody; 
+	sf::RectangleShape m_npcBody; 
+	sf::Vector2f m_npcLocation;
 
+	sf::RectangleShape m_interactPrompt;
+	sf::Text m_interactE;
+	sf::Vector2f m_interactOffset;
 };
 
 #endif // !GAME_HPP

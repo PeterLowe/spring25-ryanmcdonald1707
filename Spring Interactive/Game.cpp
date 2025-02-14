@@ -5,8 +5,7 @@
 
 #include "Game.h"
 #include <iostream>
-
-
+#include <time.h>
 
 /// <summary>
 /// default constructor
@@ -22,6 +21,8 @@ Game::Game() :
 	setupSprite(); // load texture
 	setupMenu();
 	setupPlayer();
+	setupNPC();
+	setupButtons();
 }
 
 /// <summary>
@@ -103,6 +104,10 @@ void Game::processKeys(sf::Event t_event)
 	{
 		currentState = preBattle;
 	}
+	if (sf::Keyboard::E == t_event.key.code && interactHover == true)
+	{
+		currentState = battle;
+	}
 }
 
 void Game::processMouseClick(sf::Event t_event)
@@ -137,6 +142,7 @@ void Game::update(sf::Time t_deltaTime)
 		getDirection();
 		move();
 		checkbounds();
+		interactWith();
 	}
 
 	checkButtons();
@@ -163,10 +169,16 @@ void Game::render()
 	{
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_backgroundSprite);
+		m_window.draw(m_npcBody);
 		m_window.draw(m_playerBody);
 		m_window.draw(m_welcomeMessage);
+		if (interactHover == true)
+		{
+			m_window.draw(m_interactPrompt);
+			m_window.draw(m_interactE);
+		}
 	}
-	else
+	else if (currentState == battle)
 	{
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_welcomeMessage);
@@ -267,6 +279,26 @@ void Game::setupPlayer()
 	m_playerBody.setSize(sf::Vector2f(40.0f, 40.0f));
 	m_playerBody.setFillColor(sf::Color::Black);
 	m_location = (sf::Vector2f(500.0f, 500.0f));
+}
+
+void Game::setupNPC()
+{
+	m_npcBody.setSize(sf::Vector2f(40.0f, 40.0f));
+	m_npcBody.setFillColor(sf::Color::Red);
+	m_npcLocation = sf::Vector2f(550.0f, 500.0f);
+	m_npcBody.setPosition(m_npcLocation);
+}
+
+void Game::setupButtons()
+{
+	m_interactPrompt.setSize(sf::Vector2f(25.0f, 25.0f));
+	m_interactPrompt.setFillColor(sf::Color::Red);
+	m_interactPrompt.setOrigin(-8.0f, 0.0f);
+	m_interactOffset = sf::Vector2f(0.0f,40.0f);
+
+	m_interactE.setFont(m_ArialBlackfont);
+	m_interactE.setString("E");
+	m_interactE.setOrigin(-9.5f, 5.5f);
 }
 
 void Game::getDirection()
@@ -389,6 +421,24 @@ void Game::checkbounds()
 	if (m_location.y > 1920.0f)
 	{
 		m_location.y = 1920.0f;
+	}
+}
+
+void Game::interactWith()
+{
+	if (m_playerBody.getGlobalBounds().intersects(m_npcBody.getGlobalBounds()))
+	{
+		interactHover = true;
+		m_interactPrompt.setPosition(m_location - m_interactOffset);
+		m_interactE.setPosition(m_location - m_interactOffset);
+		m_interactPrompt.setFillColor(sf::Color::Red);
+		m_interactE.setFillColor(sf::Color::White);
+	}
+	else
+	{
+		interactHover = false;
+		m_interactPrompt.setFillColor(sf::Color(0, 0, 0, 0));
+		m_interactE.setFillColor(sf::Color(0, 0, 0, 0));
 	}
 }
 
