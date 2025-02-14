@@ -94,10 +94,6 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Escape == t_event.key.code)
-	{
-		m_exitGame = true;
-	}
 	if (sf::Keyboard::Enter == t_event.key.code)
 	{
 		currentState = menu;
@@ -113,6 +109,11 @@ void Game::processMouseClick(sf::Event t_event)
 	if (sf::Mouse::Left == t_event.key.code && startHover == true)
 	{
 		currentState = preBattle;
+
+	}
+	if (sf::Mouse::Left == t_event.key.code && endHover == true)
+	{
+		m_exitGame = true;
 	}
 }
 
@@ -140,11 +141,19 @@ void Game::update(sf::Time t_deltaTime)
 /// </summary>
 void Game::render()
 {
-	m_window.clear(sf::Color::White);
-	m_window.draw(m_welcomeMessage);
+
 	if (currentState == menu)
 	{
+		m_window.clear(sf::Color::Blue);
 		m_window.draw(startButton);
+		m_window.draw(m_startButtonMessage);
+		m_window.draw(endButton);
+		m_window.draw(m_endButtonMessage);
+	}
+	else
+	{
+		m_window.clear(sf::Color::White);
+		m_window.draw(m_welcomeMessage);
 	}
 	m_window.display();
 }
@@ -202,8 +211,23 @@ void Game::setupMenu()
 {
 	startButton.setFillColor(sf::Color::Red);
 	startButton.setPosition(940.0f, 540.0f);
-	startButton.setSize(sf::Vector2f(150.0f, 100.0f));
-	startButton.setOrigin(75.0f, 50.0f);
+	startButton.setSize(sf::Vector2f(501.0f, 100.0f));
+	startButton.setOrigin(250.5f, 50.0f);
+
+	m_startButtonMessage.setFont(m_ArialBlackfont);
+	m_startButtonMessage.setString("START");
+	m_startButtonMessage.setPosition(1135.f, 565.0f);
+	m_startButtonMessage.setOrigin(250.5f, 50.0f);
+
+	endButton.setFillColor(sf::Color::Red);
+	endButton.setPosition(940.0f, 650.0f);
+	endButton.setSize(sf::Vector2f(501.0f, 100.0f));
+	endButton.setOrigin(250.5f, 50.0f);
+
+	m_endButtonMessage.setFont(m_ArialBlackfont);
+	m_endButtonMessage.setString("END");
+	m_endButtonMessage.setPosition(1135.f,675.0f);
+	m_endButtonMessage.setOrigin(230.75f, 50.0f);
 }
 
 void Game::drawMenu()
@@ -224,5 +248,18 @@ void Game::checkButtons()
 	if (startButton.getGlobalBounds().contains(mousePosF))
 	{
 		startHover = true;
+	}
+	else
+	{
+		startHover = false;
+	}
+
+	if (endButton.getGlobalBounds().contains(mousePosF))
+	{
+		endHover = true;
+	}
+	else
+	{
+		endHover = false;
 	}
 }

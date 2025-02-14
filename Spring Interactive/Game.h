@@ -56,12 +56,17 @@ private:
 	bool m_exitGame; // control exiting game
 	bool click = false;
 	bool startHover = false;
+	bool endHover = false;
 
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosF;
 
 
 	sf::RectangleShape startButton;
+	sf::Text m_startButtonMessage;
+
+	sf::RectangleShape endButton;
+	sf::Text m_endButtonMessage;
 
 };
 
