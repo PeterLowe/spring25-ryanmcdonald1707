@@ -15,11 +15,12 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 800U, 600U, 32U }, "SFML Game" },
+	m_window{ sf::VideoMode{ 1920U, 1080U, 32U }, "Spring Interactive 2025", sf::Style::Fullscreen},
 	m_exitGame{false} //when true game will exit
 {
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
+	setupMenu();
 }
 
 /// <summary>
@@ -93,6 +94,14 @@ void Game::processKeys(sf::Event t_event)
 	{
 		m_exitGame = true;
 	}
+	if (sf::Keyboard::Enter == t_event.key.code)
+	{
+		currentState = menu;
+	}
+	if (sf::Keyboard::F2 == t_event.key.code)
+	{
+		currentState = preBattle;
+	}
 }
 
 /// <summary>
@@ -109,6 +118,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	updateGameState();
 }
 
 /// <summary>
@@ -118,7 +128,6 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 	m_window.draw(m_welcomeMessage);
-	m_window.draw(m_logoSprite);
 	m_window.display();
 }
 
@@ -147,11 +156,36 @@ void Game::setupFontAndText()
 /// </summary>
 void Game::setupSprite()
 {
-	if (!m_logoTexture.loadFromFile("ASSETS\\IMAGES\\SFML-LOGO.png"))
+
+}
+void Game::updateGameState()
+{
+	switch (currentState)
 	{
-		// simple error message if previous call fails
-		std::cout << "problem loading logo" << std::endl;
+		case menu:
+		{
+			drawMenu();	
+			break;
+		}
+		case preBattle:
+		{
+			m_welcomeMessage.setString("PREBATTLE");
+			break;
+		}
+		case battle:
+		{
+			m_welcomeMessage.setString("BATTLE");
+			break;
+		}
 	}
-	m_logoSprite.setTexture(m_logoTexture);
-	m_logoSprite.setPosition(300.0f, 180.0f);
+}
+
+void Game::setupMenu()
+{
+
+}
+
+void Game::drawMenu()
+{
+	m_welcomeMessage.setString("MENU");
 }

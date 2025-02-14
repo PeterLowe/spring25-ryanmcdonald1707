@@ -11,6 +11,13 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 
+ enum gameState
+{
+	menu,
+	preBattle,
+	battle
+};
+
 class Game
 {
 public:
@@ -21,6 +28,8 @@ public:
 	/// </summary>
 	void run();
 
+	gameState currentState = menu;
+
 private:
 
 	void processEvents();
@@ -28,8 +37,12 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 	
+	void updateGameState();
 	void setupFontAndText();
 	void setupSprite();
+
+	void setupMenu();
+	void drawMenu();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
