@@ -70,7 +70,6 @@ private:
 	void move();
 	void checkbounds();
 	void interactWith();
-	void getCollision();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -85,6 +84,9 @@ private:
 
 	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
 	sf::Text m_title;
+
+	sf::Texture m_menuTexture;
+	sf::Sprite m_menuSprite;
 
 	sf::RectangleShape startButton;
 	sf::Text m_startButtonMessage;

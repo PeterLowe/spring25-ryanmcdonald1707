@@ -159,6 +159,7 @@ void Game::render()
 	if (currentState == menu)
 	{
 		m_window.clear(sf::Color(78, 78, 78, 255));
+		m_window.draw(m_menuSprite);
 		m_window.draw(startButton);
 		m_window.draw(m_startButtonMessage);
 		m_window.draw(endButton);
@@ -211,12 +212,14 @@ void Game::setupFontAndText()
 /// </summary>
 void Game::setupSprite()
 {
-	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\GrassFloor.png"))
+	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\GrassFloor.png")
+		|| !m_menuTexture.loadFromFile("ASSETS\\IMAGES\\menuBackground.png"))
 	{
 		std::cout << "Error loading Textures" << std::endl;
 	}
 
 	m_backgroundSprite.setTexture(m_backgroundTexture);
+	m_menuSprite.setTexture(m_menuTexture);
 }
 void Game::updateGameState()
 {
