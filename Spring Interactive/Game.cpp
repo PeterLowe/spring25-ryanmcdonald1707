@@ -6,6 +6,8 @@
 #include "Game.h"
 #include <iostream>
 #include <time.h>
+#include <fstream>
+#include <vector>
 
 /// <summary>
 /// default constructor
@@ -23,6 +25,7 @@ Game::Game() :
 	setupPlayer();
 	setupNPC();
 	setupButtons();
+	setupSpeech();
 }
 
 /// <summary>
@@ -112,12 +115,12 @@ void Game::processKeys(sf::Event t_event)
 
 void Game::processMouseClick(sf::Event t_event)
 {
-	if (sf::Mouse::Left == t_event.key.code && startHover == true)
+	if (startHover == true)
 	{
+		std::cout << "TESRTING BUG" << std::endl;
 		currentState = preBattle;
-
 	}
-	if (sf::Mouse::Left == t_event.key.code && endHover == true)
+	if (endHover == true)
 	{
 		m_exitGame = true;
 	}
@@ -137,6 +140,10 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	if (currentState == menu)
+	{
+		checkButtons();
+	}
 	if (currentState == preBattle)
 	{
 		getDirection();
@@ -144,8 +151,11 @@ void Game::update(sf::Time t_deltaTime)
 		checkbounds();
 		interactWith();
 	}
+	if (currentState == battle)
+	{
+		continueSpeech();
+	}
 
-	checkButtons();
 	getMousePos();
 	updateGameState();
 }
@@ -158,7 +168,7 @@ void Game::render()
 
 	if (currentState == menu)
 	{
-		m_window.clear(sf::Color(78, 78, 78, 255));
+		m_window.clear(sf::Color::White);
 		m_window.draw(m_menuSprite);
 		m_window.draw(startButton);
 		m_window.draw(m_startButtonMessage);
@@ -166,7 +176,8 @@ void Game::render()
 		m_window.draw(m_endButtonMessage);
 		m_window.draw(m_title);
 	}
-	else if (currentState == preBattle)
+
+	else if(currentState == preBattle)
 	{
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_backgroundSprite);
@@ -179,11 +190,17 @@ void Game::render()
 			m_window.draw(m_interactE);
 		}
 	}
-	else if (currentState == battle)
+	else if(currentState == battle)
 	{
 		m_window.clear(sf::Color::White);
-		m_window.draw(m_welcomeMessage);
+		m_window.draw(m_textBox);
+		m_window.draw(m_speech);
 	}
+	else
+	{
+		m_window.clear(sf::Color::White);
+	}
+
 	m_window.display();
 }
 
@@ -232,12 +249,10 @@ void Game::updateGameState()
 		}
 		case preBattle:
 		{
-			m_welcomeMessage.setString("PREBATTLE");
 			break;
 		}
 		case battle:
 		{
-			m_welcomeMessage.setString("BATTLE");
 			break;
 		}
 	}
@@ -303,6 +318,26 @@ void Game::setupButtons()
 	m_interactE.setString("E");
 	m_interactE.setOrigin(-9.5f, 5.5f);
 }
+
+void Game::setupSpeech()
+{
+	std::ifstream file("ASSETS\\TEXT\\speech.txt");
+	while (std::getline(file, currentLine))
+	{
+		std::cout << currentLine << std::endl;
+		lineByLine.push_back(currentLine);
+	}
+	file.close();
+
+	m_speech.setString(lineByLine[lineIndex]);
+	m_speech.setFillColor(sf::Color::Black);
+	m_speech.setFont(m_ArialBlackfont);
+
+	m_textBox.setFillColor(sf::Color::Black);
+	m_textBox.setPosition(sf::Vector2f(940.0f, 650.0f));
+
+}
+
 
 void Game::getDirection()
 {
@@ -445,6 +480,25 @@ void Game::interactWith()
 	}
 }
 
+void Game::continueSpeech()
+{
+	bool cutsceneOver = false;
+	if (cutsceneClock.getElapsedTime().asSeconds() >= 6.0f && cutsceneOver == false)
+	{
+		cutsceneClock.restart();
+		lineIndex++;
+		if (lineByLine[lineIndex] != "")
+		{
+			m_speech.setString(lineByLine[lineIndex]);
+		}
+
+		if (lineIndex >= lineByLine.size())
+		{
+			cutsceneOver = true;
+		}
+	}
+}
+
 void Game::getMousePos()
 {
 	mousePos = sf::Mouse::getPosition(m_window);
@@ -471,6 +525,7 @@ void Game::checkButtons()
 
 	if (endButton.getGlobalBounds().contains(mousePosF))
 	{
+		std::cout << "true" << std::endl;
 		endHover = true;
 		endButton.setOutlineColor(sf::Color(141, 0, 0, 255));
 		endButton.setOutlineThickness(4);
@@ -478,10 +533,12 @@ void Game::checkButtons()
 	}
 	else if (!endButton.getGlobalBounds().contains(mousePosF))
 	{
+		std::cout << "false" << std::endl;
 		endHover = false;
 		endButton.setOutlineThickness(0);
 		endButton.setFillColor(sf::Color::Red);
 	}
 }
+
 
 

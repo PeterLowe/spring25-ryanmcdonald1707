@@ -10,6 +10,9 @@
 /// Don't forget the endif at the bottom
 /// </summary>
 #include <SFML/Graphics.hpp>
+#include <time.h>
+#include <fstream>
+#include <vector>
 
 enum Direction
 {
@@ -57,6 +60,7 @@ private:
 	void setupSprite();
 	void getMousePos();
 	void checkButtons();
+	void setupSpeech();
 
 	//FUNCTIONS FOR MENU
 	void setupMenu();
@@ -70,6 +74,7 @@ private:
 	void move();
 	void checkbounds();
 	void interactWith();
+	void continueSpeech();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -101,6 +106,7 @@ private:
 	//TEXTURES, SPRITES AND VARIABLES FOR PREBATTLE
 	bool interactHover = false;
 	bool interactPressed = false;
+	bool textFinished = false;
 
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;
@@ -112,6 +118,13 @@ private:
 	sf::RectangleShape m_interactPrompt;
 	sf::Text m_interactE;
 	sf::Vector2f m_interactOffset;
+
+	sf::RectangleShape m_textBox;
+	sf::Text m_speech;
+	std::vector<std::string> lineByLine;
+	std::string currentLine;
+	sf::Clock cutsceneClock;
+	size_t lineIndex;
 };
 
 #endif // !GAME_HPP
