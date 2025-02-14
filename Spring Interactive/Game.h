@@ -68,6 +68,7 @@ private:
 	sf::RectangleShape endButton;
 	sf::Text m_endButtonMessage;
 
+
 };
 
 #endif // !GAME_HPP

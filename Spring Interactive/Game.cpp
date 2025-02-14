@@ -144,7 +144,7 @@ void Game::render()
 
 	if (currentState == menu)
 	{
-		m_window.clear(sf::Color::Blue);
+		m_window.clear(sf::Color(78, 78, 78, 255));
 		m_window.draw(startButton);
 		m_window.draw(m_startButtonMessage);
 		m_window.draw(endButton);
@@ -249,23 +249,27 @@ void Game::checkButtons()
 	{
 		startHover = true;
 		startButton.setOutlineColor(sf::Color::Black);
-		startButton.setOutlineThickness(3);
+		startButton.setOutlineThickness(4);
+		startButton.setFillColor(sf::Color(171, 3, 3, 255));
 	}
 	else if (!startButton.getGlobalBounds().contains(mousePosF))
 	{
 		startHover = false;
 		startButton.setOutlineThickness(0);
+		startButton.setFillColor(sf::Color::Red);
 	}
 
 	if (endButton.getGlobalBounds().contains(mousePosF))
 	{
 		endHover = true;
 		endButton.setOutlineColor(sf::Color::Black);
-		endButton.setOutlineThickness(3);
+		endButton.setOutlineThickness(4);
+		endButton.setFillColor(sf::Color(171, 3, 3, 255));
 	}
 	else if (!endButton.getGlobalBounds().contains(mousePosF))
 	{
 		endHover = false;
 		endButton.setOutlineThickness(0);
+		endButton.setFillColor(sf::Color::Red);
 	}
 }
