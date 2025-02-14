@@ -248,18 +248,24 @@ void Game::checkButtons()
 	if (startButton.getGlobalBounds().contains(mousePosF))
 	{
 		startHover = true;
+		startButton.setOutlineColor(sf::Color::Black);
+		startButton.setOutlineThickness(3);
 	}
-	else
+	else if (!startButton.getGlobalBounds().contains(mousePosF))
 	{
 		startHover = false;
+		startButton.setOutlineThickness(0);
 	}
 
 	if (endButton.getGlobalBounds().contains(mousePosF))
 	{
 		endHover = true;
+		endButton.setOutlineColor(sf::Color::Black);
+		endButton.setOutlineThickness(3);
 	}
-	else
+	else if (!endButton.getGlobalBounds().contains(mousePosF))
 	{
 		endHover = false;
+		endButton.setOutlineThickness(0);
 	}
 }
