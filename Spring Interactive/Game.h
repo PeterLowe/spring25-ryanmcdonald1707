@@ -11,7 +11,20 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 
- enum gameState
+enum Direction
+{
+	None,
+	Up,
+	Down,
+	Left,
+	Right,
+	TopRight,
+	TopLeft,
+	BottomRight,
+	BottomLeft,
+};
+
+enum gameState
 {
 	menu,
 	preBattle,
@@ -45,6 +58,10 @@ private:
 	void setupMenu();
 	void drawMenu();
 
+	void setupPlayer();
+	void getDirection();
+	void move();
+
 	void getMousePos();
 	void checkButtons();
 
@@ -70,6 +87,11 @@ private:
 	sf::RectangleShape endButton;
 	sf::Text m_endButtonMessage;
 
+	sf::RectangleShape m_playerBody;
+
+	Direction m_heading;
+	sf::Vector2f m_location;
+	float m_speed{ 1.6f };
 
 };
 

@@ -21,6 +21,7 @@ Game::Game() :
 	setupFontAndText(); // load font 
 	setupSprite(); // load texture
 	setupMenu();
+	setupPlayer();
 }
 
 /// <summary>
@@ -131,6 +132,11 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	if (currentState == preBattle)
+	{
+		getDirection();
+		move();
+	}
 	checkButtons();
 	getMousePos();
 	updateGameState();
@@ -150,6 +156,12 @@ void Game::render()
 		m_window.draw(endButton);
 		m_window.draw(m_endButtonMessage);
 		m_window.draw(m_title);
+	}
+	else if (currentState == preBattle)
+	{
+		m_window.clear(sf::Color::White);
+		m_window.draw(m_playerBody);
+		m_window.draw(m_welcomeMessage);
 	}
 	else
 	{
@@ -242,6 +254,72 @@ void Game::drawMenu()
 	m_welcomeMessage.setString("MENU");
 }
 
+void Game::setupPlayer()
+{
+	m_playerBody.setSize(sf::Vector2f(40.0f, 40.0f));
+	m_playerBody.setFillColor(sf::Color::Black);
+	m_location = (sf::Vector2f(500.0f, 500.0f));
+}
+
+void Game::getDirection()
+{
+	m_heading = Direction::None;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		m_heading = Direction::Up;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		m_heading = Direction::Down;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		m_heading = Direction::Left;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		m_heading = Direction::Right;
+	}
+}
+
+void Game::move()
+{
+	sf::Vector2f move{0.0f,0.0f};
+	switch (m_heading)
+	{
+		case Direction::None:
+		{
+			break;
+		}
+		case Direction::Up:
+		{
+			std::cout << "MOVEMENT UP PRESSED";
+			move.y = -m_speed;
+			break;
+		}
+		case Direction::Down:
+		{
+			std::cout << "MOVEMENT DOWN PRESSED";
+			move.y = m_speed;
+			break;
+		}
+		case Direction::Left:
+		{
+			std::cout << "MOVEMENT LEFT PRESSED";
+			move.x = -m_speed;
+			break;
+		}
+		case Direction::Right:
+		{
+			std::cout << "MOVEMENT RIGHT PRESSED";
+			move.x = m_speed;
+			break;
+		}
+	}
+	m_location += move;
+	m_playerBody.setPosition(m_location);
+}
+
 void Game::getMousePos()
 {
 	mousePos = sf::Mouse::getPosition(m_window);
@@ -280,3 +358,5 @@ void Game::checkButtons()
 		endButton.setFillColor(sf::Color::Red);
 	}
 }
+
+
