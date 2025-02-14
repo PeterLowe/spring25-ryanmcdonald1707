@@ -280,6 +280,22 @@ void Game::getDirection()
 	{
 		m_heading = Direction::Right;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		m_heading = Direction::TopLeft;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		m_heading = Direction::TopRight;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		m_heading = Direction::BottomLeft;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		m_heading = Direction::BottomRight;
+	}
 }
 
 void Game::move()
@@ -313,6 +329,34 @@ void Game::move()
 		{
 			std::cout << "MOVEMENT RIGHT PRESSED";
 			move.x = m_speed;
+			break;
+		}
+		case Direction::TopRight:
+		{
+			std::cout << "MOVEMENT TOPRIGHT PRESSED";
+			move.y = -m_speed;
+			move.x = m_speed;
+			break;
+		}
+		case Direction::TopLeft:
+		{
+			std::cout << "MOVEMENT TOPLEFT PRESSED";
+			move.y = -m_speed;
+			move.x = -m_speed;
+			break;
+		}
+		case Direction::BottomRight:
+		{
+			std::cout << "MOVEMENT BOTTOMRIGHT PRESSED";
+			move.y = m_speed;
+			move.x = m_speed;
+			break;
+		}
+		case Direction::BottomLeft:
+		{
+			std::cout << "MOVEMENT BOTTOMLEFT PRESSED";
+			move.y = m_speed;
+			move.x = -m_speed;
 			break;
 		}
 	}
