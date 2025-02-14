@@ -34,6 +34,7 @@ private:
 
 	void processEvents();
 	void processKeys(sf::Event t_event);
+	void processMouseClick(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
 	void render();
 	
@@ -44,12 +45,23 @@ private:
 	void setupMenu();
 	void drawMenu();
 
+	void getMousePos();
+	void checkButtons();
+
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
 	sf::Text m_welcomeMessage; // text used for message on screen
 	sf::Texture m_logoTexture; // texture used for sfml logo
 	sf::Sprite m_logoSprite; // sprite used for sfml logo
 	bool m_exitGame; // control exiting game
+	bool click = false;
+	bool startHover = false;
+
+	sf::Vector2i mousePos;
+	sf::Vector2f mousePosF;
+
+
+	sf::RectangleShape startButton;
 
 };
 

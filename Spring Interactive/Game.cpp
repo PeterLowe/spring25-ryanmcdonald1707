@@ -80,6 +80,10 @@ void Game::processEvents()
 		{
 			processKeys(newEvent);
 		}
+		if (sf::Event::MouseButtonPressed == newEvent.type) //user pressed a key
+		{
+			processMouseClick(newEvent);
+		}
 	}
 }
 
@@ -104,6 +108,14 @@ void Game::processKeys(sf::Event t_event)
 	}
 }
 
+void Game::processMouseClick(sf::Event t_event)
+{
+	if (sf::Mouse::Left == t_event.key.code && startHover == true)
+	{
+		currentState = preBattle;
+	}
+}
+
 /// <summary>
 /// Update the game world
 /// </summary>
@@ -118,6 +130,8 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+	checkButtons();
+	getMousePos();
 	updateGameState();
 }
 
@@ -128,6 +142,10 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 	m_window.draw(m_welcomeMessage);
+	if (currentState == menu)
+	{
+		m_window.draw(startButton);
+	}
 	m_window.display();
 }
 
@@ -182,10 +200,29 @@ void Game::updateGameState()
 
 void Game::setupMenu()
 {
-
+	startButton.setFillColor(sf::Color::Red);
+	startButton.setPosition(940.0f, 540.0f);
+	startButton.setSize(sf::Vector2f(150.0f, 100.0f));
+	startButton.setOrigin(75.0f, 50.0f);
 }
 
 void Game::drawMenu()
 {
 	m_welcomeMessage.setString("MENU");
+}
+
+void Game::getMousePos()
+{
+	mousePos = sf::Mouse::getPosition(m_window);
+	float mouseX = mousePos.x;
+	float mouseY = mousePos.y;
+	mousePosF = sf::Vector2f(mouseX, mouseY);
+}
+
+void Game::checkButtons()
+{
+	if (startButton.getGlobalBounds().contains(mousePosF))
+	{
+		startHover = true;
+	}
 }
