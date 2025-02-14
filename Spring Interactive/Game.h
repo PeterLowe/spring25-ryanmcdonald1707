@@ -61,6 +61,7 @@ private:
 	void setupPlayer();
 	void getDirection();
 	void move();
+	void checkbounds();
 
 	void getMousePos();
 	void checkButtons();
@@ -87,11 +88,15 @@ private:
 	sf::RectangleShape endButton;
 	sf::Text m_endButtonMessage;
 
-	sf::RectangleShape m_playerBody;
-
 	Direction m_heading;
 	sf::Vector2f m_location;
 	float m_speed{ 1.6f };
+
+	//TEXTURES AND SPRITES FOR PREBATTLE
+	sf::Texture m_backgroundTexture;
+	sf::Sprite m_backgroundSprite;
+
+	sf::RectangleShape m_playerBody;
 
 };
 

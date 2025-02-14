@@ -136,7 +136,9 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		getDirection();
 		move();
+		checkbounds();
 	}
+
 	checkButtons();
 	getMousePos();
 	updateGameState();
@@ -160,6 +162,7 @@ void Game::render()
 	else if (currentState == preBattle)
 	{
 		m_window.clear(sf::Color::White);
+		m_window.draw(m_backgroundSprite);
 		m_window.draw(m_playerBody);
 		m_window.draw(m_welcomeMessage);
 	}
@@ -196,7 +199,12 @@ void Game::setupFontAndText()
 /// </summary>
 void Game::setupSprite()
 {
+	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\GrassFloor.png"))
+	{
+		std::cout << "Error loading Textures" << std::endl;
+	}
 
+	m_backgroundSprite.setTexture(m_backgroundTexture);
 }
 void Game::updateGameState()
 {
@@ -362,6 +370,26 @@ void Game::move()
 	}
 	m_location += move;
 	m_playerBody.setPosition(m_location);
+}
+
+void Game::checkbounds()
+{
+	if (m_location.x < 0.0f )
+	{
+		m_location.x = 0.0f;
+	}
+	if (m_location.x > 1080.0f)
+	{
+		m_location.x = 1080.0f;
+	}
+	if (m_location.y < 0.0f)
+	{
+		m_location.y = 0.0f;
+	}
+	if (m_location.y > 1920.0f)
+	{
+		m_location.y = 1920.0f;
+	}
 }
 
 void Game::getMousePos()
