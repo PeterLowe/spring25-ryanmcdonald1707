@@ -62,6 +62,8 @@ private:
 	sf::Vector2f mousePosF;
 
 
+	sf::Text m_title;
+
 	sf::RectangleShape startButton;
 	sf::Text m_startButtonMessage;
 

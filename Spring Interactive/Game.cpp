@@ -149,6 +149,7 @@ void Game::render()
 		m_window.draw(m_startButtonMessage);
 		m_window.draw(endButton);
 		m_window.draw(m_endButtonMessage);
+		m_window.draw(m_title);
 	}
 	else
 	{
@@ -228,6 +229,12 @@ void Game::setupMenu()
 	m_endButtonMessage.setString("END");
 	m_endButtonMessage.setPosition(1135.f,675.0f);
 	m_endButtonMessage.setOrigin(230.75f, 50.0f);
+
+	m_title.setFont(m_ArialBlackfont);
+	m_title.setString("Petebound");
+	m_title.setPosition(693.0f, 300.0f);
+	m_title.setOrigin(2.75f, 50.0f);
+	m_title.setScale(3.0f, 3.0f);
 }
 
 void Game::drawMenu()
