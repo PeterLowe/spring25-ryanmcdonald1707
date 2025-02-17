@@ -25,7 +25,6 @@ Game::Game() :
 	setupPlayer();
 	setupNPC();
 	setupButtons();
-	setupSpeech();
 }
 
 /// <summary>
@@ -153,7 +152,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	if (currentState == battle)
 	{
-		continueSpeech();
+		failsafe();
 	}
 
 	getMousePos();
@@ -193,8 +192,7 @@ void Game::render()
 	else if(currentState == battle)
 	{
 		m_window.clear(sf::Color::White);
-		m_window.draw(m_textBox);
-		m_window.draw(m_speech);
+		m_window.draw(m_backgroundSprite);
 	}
 	else
 	{
@@ -318,26 +316,6 @@ void Game::setupButtons()
 	m_interactE.setString("E");
 	m_interactE.setOrigin(-9.5f, 5.5f);
 }
-
-void Game::setupSpeech()
-{
-	std::ifstream file("ASSETS\\TEXT\\speech.txt");
-	while (std::getline(file, currentLine))
-	{
-		std::cout << currentLine << std::endl;
-		lineByLine.push_back(currentLine);
-	}
-	file.close();
-
-	m_speech.setString(lineByLine[lineIndex]);
-	m_speech.setFillColor(sf::Color::Black);
-	m_speech.setFont(m_ArialBlackfont);
-
-	m_textBox.setFillColor(sf::Color::Black);
-	m_textBox.setPosition(sf::Vector2f(940.0f, 650.0f));
-
-}
-
 
 void Game::getDirection()
 {
@@ -480,24 +458,12 @@ void Game::interactWith()
 	}
 }
 
-void Game::continueSpeech()
+void Game::failsafe()
 {
-	bool cutsceneOver = false;
-	if (cutsceneClock.getElapsedTime().asSeconds() >= 6.0f && cutsceneOver == false)
-	{
-		cutsceneClock.restart();
-		lineIndex++;
-		if (lineByLine[lineIndex] != "")
-		{
-			m_speech.setString(lineByLine[lineIndex]);
-		}
-
-		if (lineIndex >= lineByLine.size())
-		{
-			cutsceneOver = true;
-		}
-	}
+	startHover = false;
+	endHover = false;
 }
+
 
 void Game::getMousePos()
 {
