@@ -141,6 +141,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	if (currentState == menu)
 	{
+		drawMenu();
 		checkButtons();
 	}
 	if (currentState == preBattle)
@@ -169,9 +170,9 @@ void Game::render()
 	{
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_menuSprite);
-		m_window.draw(startButton);
+		m_window.draw(m_startSprite);
+		m_window.draw(m_endSprite);
 		m_window.draw(m_startButtonMessage);
-		m_window.draw(endButton);
 		m_window.draw(m_endButtonMessage);
 		m_window.draw(m_title);
 	}
@@ -192,7 +193,6 @@ void Game::render()
 	else if(currentState == battle)
 	{
 		m_window.clear(sf::Color::White);
-		m_window.draw(m_backgroundSprite);
 	}
 	else
 	{
@@ -228,13 +228,15 @@ void Game::setupFontAndText()
 void Game::setupSprite()
 {
 	if (!m_backgroundTexture.loadFromFile("ASSETS\\IMAGES\\GrassFloor.png")
-		|| !m_menuTexture.loadFromFile("ASSETS\\IMAGES\\menuBackground.png"))
+		|| !m_menuTexture.loadFromFile("ASSETS\\IMAGES\\gradient1.png"))
 	{
 		std::cout << "Error loading Textures" << std::endl;
 	}
 
 	m_backgroundSprite.setTexture(m_backgroundTexture);
 	m_menuSprite.setTexture(m_menuTexture);
+
+	m_menuSprite.setTextureRect(sf::IntRect(0, 0, m_window.getSize().x, m_window.getSize().y));
 }
 void Game::updateGameState()
 {
@@ -258,20 +260,23 @@ void Game::updateGameState()
 
 void Game::setupMenu()
 {
-	startButton.setFillColor(sf::Color::Red);
-	startButton.setPosition(940.0f, 540.0f);
-	startButton.setSize(sf::Vector2f(501.0f, 100.0f));
-	startButton.setOrigin(250.5f, 50.0f);
+	if (!m_buttonTexture.loadFromFile("ASSETS\\IMAGES\\ButtonSprite1.png"))
+	{
+		std::cout << "Error loading Button Textures" << std::endl;
+	}
+
+	m_startSprite.setTexture(m_buttonTexture);
+	m_startSprite.setPosition(940.0f,540.0f);
+	m_startSprite.setOrigin(250.5f, 50.0f);
+
+	m_endSprite.setTexture(m_buttonTexture);
+	m_endSprite.setPosition(940.0f, 650.0f);
+	m_endSprite.setOrigin(250.5f, 50.0f);
 
 	m_startButtonMessage.setFont(m_ArialBlackfont);
 	m_startButtonMessage.setString("START");
 	m_startButtonMessage.setPosition(1135.f, 565.0f);
 	m_startButtonMessage.setOrigin(250.5f, 50.0f);
-
-	endButton.setFillColor(sf::Color::Red);
-	endButton.setPosition(940.0f, 650.0f);
-	endButton.setSize(sf::Vector2f(501.0f, 100.0f));
-	endButton.setOrigin(250.5f, 50.0f);
 
 	m_endButtonMessage.setFont(m_ArialBlackfont);
 	m_endButtonMessage.setString("END");
@@ -287,7 +292,6 @@ void Game::setupMenu()
 
 void Game::drawMenu()
 {
-	m_welcomeMessage.setString("MENU");
 }
 
 void Game::setupPlayer()
@@ -447,14 +451,10 @@ void Game::interactWith()
 		interactHover = true;
 		m_interactPrompt.setPosition(m_location - m_interactOffset);
 		m_interactE.setPosition(m_location - m_interactOffset);
-		m_interactPrompt.setFillColor(sf::Color::Red);
-		m_interactE.setFillColor(sf::Color::White);
 	}
 	else
 	{
 		interactHover = false;
-		m_interactPrompt.setFillColor(sf::Color(0, 0, 0, 0));
-		m_interactE.setFillColor(sf::Color(0, 0, 0, 0));
 	}
 }
 
@@ -475,34 +475,26 @@ void Game::getMousePos()
 
 void Game::checkButtons()
 {
-	if (startButton.getGlobalBounds().contains(mousePosF))
+	if (m_startSprite.getGlobalBounds().contains(mousePosF))
 	{
 		startHover = true;
-		startButton.setOutlineColor(sf::Color(141, 0, 0, 255));
-		startButton.setOutlineThickness(4);
-		startButton.setFillColor(sf::Color(171, 3, 3, 255));
+		m_startSprite.setColor(sf::Color(106, 106, 106, 255));
 	}
-	else if (!startButton.getGlobalBounds().contains(mousePosF))
+	else if (!m_startSprite.getGlobalBounds().contains(mousePosF))
 	{
 		startHover = false;
-		startButton.setOutlineThickness(0);
-		startButton.setFillColor(sf::Color::Red);
+		m_startSprite.setColor(sf::Color::White);
 	}
 
-	if (endButton.getGlobalBounds().contains(mousePosF))
+	if (m_endSprite.getGlobalBounds().contains(mousePosF))
 	{
-		std::cout << "true" << std::endl;
 		endHover = true;
-		endButton.setOutlineColor(sf::Color(141, 0, 0, 255));
-		endButton.setOutlineThickness(4);
-		endButton.setFillColor(sf::Color(171, 3, 3, 255));
+		m_endSprite.setColor(sf::Color(106,106,106, 255));
 	}
-	else if (!endButton.getGlobalBounds().contains(mousePosF))
+	else if (!m_endSprite.getGlobalBounds().contains(mousePosF))
 	{
-		std::cout << "false" << std::endl;
 		endHover = false;
-		endButton.setOutlineThickness(0);
-		endButton.setFillColor(sf::Color::Red);
+		m_endSprite.setColor(sf::Color::White);
 	}
 }
 

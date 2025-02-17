@@ -34,6 +34,13 @@ enum gameState
 	battle
 };
 
+enum interacted
+{
+	npc, 
+	npc2,
+	npc3,
+};
+
 class Game
 {
 public:
@@ -74,6 +81,7 @@ private:
 	void checkbounds();
 	void interactWith();
 
+
 	//FUNCTIONS FOR BATTLE
 	void failsafe();
 
@@ -94,11 +102,13 @@ private:
 	sf::Texture m_menuTexture;
 	sf::Sprite m_menuSprite;
 
-	sf::RectangleShape startButton;
 	sf::Text m_startButtonMessage;
 
-	sf::RectangleShape endButton;
 	sf::Text m_endButtonMessage;
+
+	sf::Texture m_buttonTexture;
+	sf::Sprite m_startSprite;
+	sf::Sprite m_endSprite;
 
 	Direction m_heading;
 	sf::Vector2f m_location;
