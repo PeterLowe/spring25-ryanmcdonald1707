@@ -80,6 +80,7 @@ private:
 	void setupEnemy();
 	void setupBattleMenu();
 	void enemySelect();
+	void optionSelect();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -130,6 +131,16 @@ private:
 
 	sf::Text m_enemyName;
 	sf::RectangleShape m_battleScreenRect;
+	sf::RectangleShape m_subMenu;
+	sf::RectangleShape m_Fight;
+	sf::RectangleShape m_Magic;
+	sf::RectangleShape m_Item;
+	sf::RectangleShape m_Bag;
+
+	sf::Text fightText;
+	sf::Text magicText;
+	sf::Text itemText;
+	sf::Text bagText;
 
 	sf::Vector2f m_enemyPos;
 
@@ -138,8 +149,12 @@ private:
 	bool enterPressed{ false };
 	bool subMenuOpen{ false };
 	int enemyNum{ 0 };
-	int enemyHealth{ 0 };
+
+	int enemyHealth{ 69 };
+	sf::Text m_enemyHealthText;
+
 	int blueValue{ 0 };
+
 
 };
 

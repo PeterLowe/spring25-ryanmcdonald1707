@@ -203,7 +203,10 @@ void Game::render()
 		if (subMenuOpen == true)
 		{
 			m_window.draw(m_battleScreenRect);
+			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
+			m_window.draw(m_Fight);
+			m_window.draw(m_enemyHealthText);
 		}
 	}
 	else
@@ -494,11 +497,26 @@ void Game::setupBattleMenu()
 	m_battleScreenRect.setSize(sf::Vector2f(1920.0f, 400.0f));
 	m_battleScreenRect.setFillColor(sf::Color::Black);
 
+	m_subMenu.setPosition(1200.0f, 610.0f);
+	m_subMenu.setSize(sf::Vector2f(700.0f, 375.0f));
+	m_subMenu.setFillColor(sf::Color::Red);
+
+	m_Fight.setPosition(1220.0f, 615.0f);
+	m_Fight.setSize(sf::Vector2f(663.0f, 100.0f));
+	m_Fight.setFillColor(sf::Color::Blue);
+
 	m_enemyName.setFont(m_ArialBlackfont);
 	m_enemyName.setScale(2.0f,2.0f);
 	m_enemyName.setString("PETER");
 	m_enemyName.setFillColor(sf::Color::White);
 	m_enemyName.setPosition(20.0f, 610.0f);
+
+	m_enemyHealthText.setFont(m_ArialBlackfont);
+	m_enemyHealthText.setString(std::to_string(enemyHealth));
+	m_enemyHealthText.setScale(2.0f, 2.0f);
+	m_enemyHealthText.setPosition(500.0f, 610.0f);
+
+
 }
 
 void Game::enemySelect()
@@ -524,6 +542,11 @@ void Game::enemySelect()
 
 }
 
+void Game::optionSelect()
+{
+
+
+}
 
 void Game::getMousePos()
 {
