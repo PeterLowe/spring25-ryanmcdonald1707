@@ -34,13 +34,6 @@ enum gameState
 	battle
 };
 
-enum interacted
-{
-	npc, 
-	npc2,
-	npc3,
-};
-
 class Game
 {
 public:
@@ -84,6 +77,9 @@ private:
 
 	//FUNCTIONS FOR BATTLE
 	void failsafe();
+	void setupEnemy();
+	void setupBattleMenu();
+	void enemySelect();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -128,6 +124,22 @@ private:
 	sf::RectangleShape m_interactPrompt;
 	sf::Text m_interactE;
 	sf::Vector2f m_interactOffset;
+
+	//TEXTURES, SPRITES AND VARIABLES FOR BATTLE
+	sf::RectangleShape m_enemyRect;
+
+	sf::Text m_enemyName;
+	sf::RectangleShape m_battleScreenRect;
+
+	sf::Vector2f m_enemyPos;
+
+
+	bool enemySelected{ false };
+	bool enterPressed{ false };
+	bool subMenuOpen{ false };
+	int enemyNum{ 0 };
+	int enemyHealth{ 0 };
+	int blueValue{ 0 };
 
 };
 

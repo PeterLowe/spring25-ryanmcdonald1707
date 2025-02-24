@@ -25,6 +25,8 @@ Game::Game() :
 	setupPlayer();
 	setupNPC();
 	setupButtons();
+	setupEnemy();
+	setupBattleMenu();
 }
 
 /// <summary>
@@ -98,9 +100,13 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Enter == t_event.key.code)
+	if (sf::Keyboard::Enter == t_event.key.code && enemySelected)
 	{
-		currentState = menu;
+		subMenuOpen = true;
+	}
+	if (sf::Keyboard::Right == t_event.key.code && subMenuOpen)
+	{
+		std::cout << "Right pressed";
 	}
 	if (sf::Keyboard::F2 == t_event.key.code)
 	{
@@ -116,7 +122,6 @@ void Game::processMouseClick(sf::Event t_event)
 {
 	if (startHover == true)
 	{
-		std::cout << "TESRTING BUG" << std::endl;
 		currentState = preBattle;
 	}
 	if (endHover == true)
@@ -154,6 +159,7 @@ void Game::update(sf::Time t_deltaTime)
 	if (currentState == battle)
 	{
 		failsafe();
+		enemySelect();
 	}
 
 	getMousePos();
@@ -193,6 +199,12 @@ void Game::render()
 	else if(currentState == battle)
 	{
 		m_window.clear(sf::Color::White);
+		m_window.draw(m_enemyRect);
+		if (subMenuOpen == true)
+		{
+			m_window.draw(m_battleScreenRect);
+			m_window.draw(m_enemyName);
+		}
 	}
 	else
 	{
@@ -458,10 +470,58 @@ void Game::interactWith()
 	}
 }
 
+
+//BATTLE FUNCTIONS
 void Game::failsafe()
 {
 	startHover = false;
 	endHover = false;
+}
+
+void Game::setupEnemy()
+{
+	m_enemyPos = sf::Vector2f(960.0f, 540.0f);
+
+	m_enemyRect.setSize(sf::Vector2f(50.0f, 100.0f));
+	m_enemyRect.setOrigin(25.0f, 50.0f);
+	m_enemyRect.setPosition(m_enemyPos);
+	m_enemyRect.setFillColor(sf::Color(255,0,blueValue,0));
+}
+
+void Game::setupBattleMenu()
+{
+	m_battleScreenRect.setPosition(0.0f,600.0f);
+	m_battleScreenRect.setSize(sf::Vector2f(1920.0f, 400.0f));
+	m_battleScreenRect.setFillColor(sf::Color::Black);
+
+	m_enemyName.setFont(m_ArialBlackfont);
+	m_enemyName.setScale(2.0f,2.0f);
+	m_enemyName.setString("PETER");
+	m_enemyName.setFillColor(sf::Color::White);
+	m_enemyName.setPosition(20.0f, 610.0f);
+}
+
+void Game::enemySelect()
+{
+
+	if (enemyNum == 0)
+	{
+		enemySelected = true;
+		if (!enterPressed)
+		{
+			blueValue = blueValue + 5;
+			m_enemyRect.setFillColor(sf::Color(255, 0, blueValue, 255));
+		}
+		else
+		{
+			m_enemyRect.setFillColor(sf::Color::Red);
+		}
+	}
+	else
+	{
+		enemySelected = false;
+	}
+
 }
 
 
