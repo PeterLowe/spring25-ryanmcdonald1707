@@ -104,6 +104,19 @@ void Game::processKeys(sf::Event t_event)
 	{
 		subMenuOpen = true;
 	}
+	if (sf::Keyboard::Enter == t_event.key.code && subMenuChecker == fight)
+	{
+		fightMenu = true;
+		subMenuOpen = false;
+	}
+
+	if (sf::Keyboard::Escape == t_event.key.code && currentState == battle )
+	{
+		subMenuOpen = true;
+		subMenuChecker = none;
+	}
+
+
 	if (sf::Keyboard::Down == t_event.key.code && subMenuOpen)
 	{
 		optionChange();
@@ -114,6 +127,7 @@ void Game::processKeys(sf::Event t_event)
 		optionChange();
 		forward = false;
 	}
+
 	if (sf::Keyboard::F2 == t_event.key.code)
 	{
 		currentState = preBattle;
@@ -212,9 +226,16 @@ void Game::render()
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
-			m_window.draw(m_Fight);
 			m_window.draw(m_enemyHealthText);
+			m_window.draw(m_Fight);
 			m_window.draw(m_Magic);
+		}
+		if (!subMenuOpen && subMenuChecker == fight)
+		{
+			m_window.draw(m_battleScreenRect);
+			m_window.draw(m_subMenu);
+			m_window.draw(m_enemyName);
+			m_window.draw(m_enemyHealthText);
 		}
 	}
 	else
@@ -614,6 +635,10 @@ void Game::optionChange()
 	if (forward == false)
 	{
 		option = (option + 1) % (int)battleChecker::MAX;
+	}
+	else if (option == 0 || option > 2)
+	{
+		option = 1;
 	}
 	else
 	{

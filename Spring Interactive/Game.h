@@ -39,8 +39,6 @@ enum battleChecker
 	none,
 	fight,
 	magic,
-	bag,
-	run,
 	MAX,
 };
 
@@ -159,6 +157,8 @@ private:
 	bool enemySelected{ false };
 	bool enterPressed{ false };
 	bool subMenuOpen{ false };
+	bool fightMenu{ false };
+
 	int enemyNum{ 0 };
 
 	int enemyHealth{ 69 };
