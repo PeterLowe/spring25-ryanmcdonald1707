@@ -34,6 +34,16 @@ enum gameState
 	battle
 };
 
+enum battleChecker
+{
+	none,
+	fight,
+	magic,
+	bag,
+	run,
+	MAX,
+};
+
 class Game
 {
 public:
@@ -80,7 +90,8 @@ private:
 	void setupEnemy();
 	void setupBattleMenu();
 	void enemySelect();
-	void optionSelect();
+	void optionAnimate();
+	void optionChange();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -154,7 +165,8 @@ private:
 	sf::Text m_enemyHealthText;
 
 	int blueValue{ 0 };
-
+	battleChecker subMenuChecker{none};
+	bool forward{ false };
 
 };
 

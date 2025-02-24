@@ -104,9 +104,15 @@ void Game::processKeys(sf::Event t_event)
 	{
 		subMenuOpen = true;
 	}
-	if (sf::Keyboard::Right == t_event.key.code && subMenuOpen)
+	if (sf::Keyboard::Down == t_event.key.code && subMenuOpen)
 	{
-		std::cout << "Right pressed";
+		optionChange();
+		forward = true;
+	}
+	if (sf::Keyboard::Up == t_event.key.code && subMenuOpen)
+	{
+		optionChange();
+		forward = false;
 	}
 	if (sf::Keyboard::F2 == t_event.key.code)
 	{
@@ -160,6 +166,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		failsafe();
 		enemySelect();
+		optionAnimate();
 	}
 
 	getMousePos();
@@ -207,6 +214,7 @@ void Game::render()
 			m_window.draw(m_enemyName);
 			m_window.draw(m_Fight);
 			m_window.draw(m_enemyHealthText);
+			m_window.draw(m_Magic);
 		}
 	}
 	else
@@ -505,6 +513,10 @@ void Game::setupBattleMenu()
 	m_Fight.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Fight.setFillColor(sf::Color::Blue);
 
+	m_Magic.setPosition(1220.0f, 745.0f);
+	m_Magic.setSize(sf::Vector2f(663.0f, 100.0f));
+	m_Magic.setFillColor(sf::Color::Blue);
+
 	m_enemyName.setFont(m_ArialBlackfont);
 	m_enemyName.setScale(2.0f,2.0f);
 	m_enemyName.setString("PETER");
@@ -542,12 +554,6 @@ void Game::enemySelect()
 
 }
 
-void Game::optionSelect()
-{
-
-
-}
-
 void Game::getMousePos()
 {
 	mousePos = sf::Mouse::getPosition(m_window);
@@ -580,6 +586,42 @@ void Game::checkButtons()
 		m_endSprite.setColor(sf::Color::White);
 	}
 }
+
+void Game::optionAnimate()
+{
+	if (subMenuChecker == fight)
+	{
+		m_Fight.setFillColor(sf::Color(106, 106, 106, 255));
+	}
+	else
+	{
+		m_Fight.setFillColor(sf::Color::Blue);
+	}
+
+	if (subMenuChecker == magic)
+	{
+		m_Magic.setFillColor(sf::Color(106, 106, 106, 255));
+	}
+	else
+	{
+		m_Magic.setFillColor(sf::Color::Blue);
+	}
+}
+
+void Game::optionChange()
+{
+	int option = (int)subMenuChecker;
+	if (forward == false)
+	{
+		option = (option + 1) % (int)battleChecker::MAX;
+	}
+	else
+	{
+		option = (option - 1) % (int)battleChecker::MAX;
+	}
+	subMenuChecker = (battleChecker)option;
+}
+
 
 
 
