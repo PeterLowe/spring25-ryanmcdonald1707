@@ -89,7 +89,6 @@ private:
 	void setupBattleMenu();
 	void enemySelect();
 	void optionAnimate();
-	void optionChange();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -158,6 +157,7 @@ private:
 	bool enterPressed{ false };
 	bool subMenuOpen{ false };
 	bool fightMenu{ false };
+	bool magicMenu{ false };
 
 	int enemyNum{ 0 };
 

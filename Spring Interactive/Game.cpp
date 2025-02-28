@@ -104,9 +104,15 @@ void Game::processKeys(sf::Event t_event)
 	{
 		subMenuOpen = true;
 	}
+
 	if (sf::Keyboard::Enter == t_event.key.code && subMenuChecker == fight)
 	{
 		fightMenu = true;
+		subMenuOpen = false;
+	}
+	else if (sf::Keyboard::Enter == t_event.key.code && subMenuChecker == magic)
+	{
+		magicMenu = true;
 		subMenuOpen = false;
 	}
 
@@ -119,12 +125,12 @@ void Game::processKeys(sf::Event t_event)
 
 	if (sf::Keyboard::Down == t_event.key.code && subMenuOpen)
 	{
-		optionChange();
+		subMenuChecker = magic;
 		forward = true;
 	}
 	if (sf::Keyboard::Up == t_event.key.code && subMenuOpen)
 	{
-		optionChange();
+		subMenuChecker = fight;
 		forward = false;
 	}
 
@@ -231,6 +237,13 @@ void Game::render()
 			m_window.draw(m_Magic);
 		}
 		if (!subMenuOpen && subMenuChecker == fight)
+		{
+			m_window.draw(m_battleScreenRect);
+			m_window.draw(m_subMenu);
+			m_window.draw(m_enemyName);
+			m_window.draw(m_enemyHealthText);
+		}
+		else if (!subMenuOpen && subMenuChecker == magic)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
@@ -413,52 +426,44 @@ void Game::move()
 		}
 		case Direction::Up:
 		{
-			std::cout << "MOVEMENT UP PRESSED";
 			move.y = -m_speed;
 			break;
 		}
 		case Direction::Down:
 		{
-			std::cout << "MOVEMENT DOWN PRESSED";
 			move.y = m_speed;
 			break;
 		}
 		case Direction::Left:
 		{
-			std::cout << "MOVEMENT LEFT PRESSED";
 			move.x = -m_speed;
 			break;
 		}
 		case Direction::Right:
 		{
-			std::cout << "MOVEMENT RIGHT PRESSED";
 			move.x = m_speed;
 			break;
 		}
 		case Direction::TopRight:
 		{
-			std::cout << "MOVEMENT TOPRIGHT PRESSED";
 			move.y = -m_speed;
 			move.x = m_speed;
 			break;
 		}
 		case Direction::TopLeft:
 		{
-			std::cout << "MOVEMENT TOPLEFT PRESSED";
 			move.y = -m_speed;
 			move.x = -m_speed;
 			break;
 		}
 		case Direction::BottomRight:
 		{
-			std::cout << "MOVEMENT BOTTOMRIGHT PRESSED";
 			move.y = m_speed;
 			move.x = m_speed;
 			break;
 		}
 		case Direction::BottomLeft:
 		{
-			std::cout << "MOVEMENT BOTTOMLEFT PRESSED";
 			move.y = m_speed;
 			move.x = -m_speed;
 			break;
@@ -629,23 +634,6 @@ void Game::optionAnimate()
 	}
 }
 
-void Game::optionChange()
-{
-	int option = (int)subMenuChecker;
-	if (forward == false)
-	{
-		option = (option + 1) % (int)battleChecker::MAX;
-	}
-	else if (option == 0 || option > 2)
-	{
-		option = 1;
-	}
-	else
-	{
-		option = (option - 1) % (int)battleChecker::MAX;
-	}
-	subMenuChecker = (battleChecker)option;
-}
 
 
 
