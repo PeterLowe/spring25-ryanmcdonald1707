@@ -140,6 +140,9 @@ private:
 	sf::Vector2f m_interactOffset;
 
 	//TEXTURES, SPRITES AND VARIABLES FOR BATTLE
+	sf::Texture m_battleBackgroundTexture;
+	sf::Sprite m_battleBackgroundSprite;
+
 	sf::RectangleShape m_enemyRect;
 
 	sf::Text m_enemyName;

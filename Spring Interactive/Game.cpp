@@ -228,6 +228,7 @@ void Game::render()
 	else if(currentState == battle)
 	{
 		m_window.clear(sf::Color::White);
+		m_window.draw(m_battleBackgroundSprite);
 		m_window.draw(m_enemyRect);
 		if (subMenuOpen == true)
 		{
@@ -534,6 +535,14 @@ void Game::setupEnemy()
 
 void Game::setupBattleMenu()
 {
+	if (!m_battleBackgroundTexture.loadFromFile("ASSETS//IMAGES//dune.jpg"))
+	{
+		std::cout << "bug with dune file" << std::endl;
+	}
+
+	m_battleBackgroundSprite.setTexture(m_battleBackgroundTexture);
+	m_battleBackgroundSprite.setScale((screenWidth) / m_battleBackgroundSprite.getLocalBounds().width, (screenHeight) / m_battleBackgroundSprite.getLocalBounds().height);
+
 	m_battleScreenRect.setPosition(0.0f,600.0f);
 	m_battleScreenRect.setSize(sf::Vector2f(1920.0f, 400.0f));
 	m_battleScreenRect.setFillColor(sf::Color::Black);
