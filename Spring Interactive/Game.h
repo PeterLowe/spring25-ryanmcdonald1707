@@ -143,7 +143,8 @@ private:
 	sf::Texture m_battleBackgroundTexture;
 	sf::Sprite m_battleBackgroundSprite;
 
-	sf::RectangleShape m_enemyRect;
+	sf::Texture m_enemyPlaceholderTexture;
+	sf::Sprite m_enemyPlaceholderSprite;
 
 	sf::Text m_enemyName;
 	sf::RectangleShape m_battleScreenRect;

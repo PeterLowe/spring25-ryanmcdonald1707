@@ -229,7 +229,7 @@ void Game::render()
 	{
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_battleBackgroundSprite);
-		m_window.draw(m_enemyRect);
+		m_window.draw(m_enemyPlaceholderSprite);
 		if (subMenuOpen == true)
 		{
 			m_window.draw(m_battleScreenRect);
@@ -525,12 +525,17 @@ void Game::failsafe()
 
 void Game::setupEnemy()
 {
-	m_enemyPos = sf::Vector2f(960.0f, 540.0f);
+	if (!m_enemyPlaceholderTexture.loadFromFile("ASSETS//IMAGES//SansEnemy.png"))
+	{
+		std::cout << "URUuruURUruURUruRUuUuru" << std::endl;
+	}
+	m_enemyPlaceholderSprite.setTexture(m_enemyPlaceholderTexture);
 
-	m_enemyRect.setSize(sf::Vector2f(50.0f, 100.0f));
-	m_enemyRect.setOrigin(25.0f, 50.0f);
-	m_enemyRect.setPosition(m_enemyPos);
-	m_enemyRect.setFillColor(sf::Color(255,0,blueValue,0));
+	m_enemyPos = sf::Vector2f(screenWidth / 2, screenHeight / 2);
+
+	m_enemyPlaceholderSprite.setOrigin(m_enemyPlaceholderSprite.getLocalBounds().width / 2, m_enemyPlaceholderSprite.getLocalBounds().height / 2);
+	m_enemyPlaceholderSprite.setScale(0.5,0.5);
+	m_enemyPlaceholderSprite.setPosition(m_enemyPos);
 }
 
 void Game::setupBattleMenu()
@@ -581,12 +586,12 @@ void Game::enemySelect()
 		enemySelected = true;
 		if (!enterPressed)
 		{
-			blueValue = blueValue + 5;
-			m_enemyRect.setFillColor(sf::Color(255, 0, blueValue, 255));
+			//blueValue = blueValue + 5;
+			//m_enemyPlaceholderSprite.setFillColor(sf::Color(255, 0, blueValue, 255));
 		}
 		else
 		{
-			m_enemyRect.setFillColor(sf::Color::Red);
+			//m_enemyPlaceholderSprite.setFillColor(sf::Color::Red);
 		}
 	}
 	else
