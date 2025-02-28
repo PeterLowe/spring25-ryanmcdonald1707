@@ -326,27 +326,27 @@ void Game::setupMenu()
 
 	m_startSprite.setTexture(m_buttonTexture);
 	m_startSprite.setPosition((screenWidth / 2),540.0f);
-	m_startSprite.setOrigin(250.5f, 50.0f);
+	m_startSprite.setOrigin(m_startSprite.getLocalBounds().width / 2, m_startSprite.getLocalBounds().height / 2);
 
 	m_optionSprite.setTexture(m_buttonTexture);
 	m_optionSprite.setPosition((screenWidth / 2), 650.0f);
-	m_optionSprite.setOrigin(250.5f, 50.0f);
+	m_optionSprite.setOrigin(m_optionSprite.getLocalBounds().width / 2, m_optionSprite.getLocalBounds().height / 2);
 
 	m_startButtonMessage.setFont(m_ArialBlackfont);
 	m_startButtonMessage.setString("START");
-	m_startButtonMessage.setPosition(screenWidth / 2, 565.0f);
-	m_startButtonMessage.setOrigin(0.0f, 0.0f);
+	m_startButtonMessage.setPosition(screenWidth / 2, 535.0f);
+	m_startButtonMessage.setOrigin(m_startButtonMessage.getLocalBounds().width / 2, m_startButtonMessage.getLocalBounds().height / 2);
 
 	m_OptionButtonMessage.setFont(m_ArialBlackfont);
 	m_OptionButtonMessage.setString("OPTIONS");
-	m_OptionButtonMessage.setPosition(screenWidth / 2, 650.0f);
-	m_OptionButtonMessage.setOrigin(0.0f, 0.0f);
+	m_OptionButtonMessage.setPosition(screenWidth / 2, m_optionSprite.getLocalBounds().height / 2);
+	m_OptionButtonMessage.setOrigin(m_OptionButtonMessage.getLocalBounds().width / 2, m_OptionButtonMessage.getLocalBounds().height / 2);
 
 	m_title.setFont(m_ArialBlackfont);
 	m_title.setString("Petebound");
-	m_title.setPosition(693.0f, 300.0f);
-	m_title.setOrigin(2.75f, 50.0f);
-	m_title.setScale(3.0f, 3.0f);
+	m_title.setCharacterSize(120u);
+	m_title.setPosition(screenWidth / 2, 300.0f);
+	m_title.setOrigin(m_title.getLocalBounds().width / 2, m_title.getLocalBounds().height / 2);
 
 	m_optionsMenuRect.setPosition(screenWidth / 2, screenHeight / 2);
 	m_optionsMenuRect.setSize(sf::Vector2f(screenWidth / 2, screenHeight / 2));
