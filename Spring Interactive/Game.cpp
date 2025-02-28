@@ -334,13 +334,13 @@ void Game::setupMenu()
 
 	m_startButtonMessage.setFont(m_ArialBlackfont);
 	m_startButtonMessage.setString("START");
-	m_startButtonMessage.setPosition(screenWidth / 2, 535.0f);
 	m_startButtonMessage.setOrigin(m_startButtonMessage.getLocalBounds().width / 2, m_startButtonMessage.getLocalBounds().height / 2);
+	m_startButtonMessage.setPosition(screenWidth / 2, m_startSprite.getPosition().y - 5);
 
 	m_OptionButtonMessage.setFont(m_ArialBlackfont);
 	m_OptionButtonMessage.setString("OPTIONS");
-	m_OptionButtonMessage.setPosition(screenWidth / 2, m_optionSprite.getLocalBounds().height / 2);
 	m_OptionButtonMessage.setOrigin(m_OptionButtonMessage.getLocalBounds().width / 2, m_OptionButtonMessage.getLocalBounds().height / 2);
+	m_OptionButtonMessage.setPosition(screenWidth / 2, m_optionSprite.getPosition().y - 5);
 
 	m_title.setFont(m_ArialBlackfont);
 	m_title.setString("Petebound");
