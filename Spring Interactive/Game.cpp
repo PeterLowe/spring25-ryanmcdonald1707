@@ -16,7 +16,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1920U, 1080U, 32U }, "Spring Interactive 2025", sf::Style::Fullscreen},
+	m_window{ sf::VideoMode{ screenWidth, screenHeight, 32U }, "Spring Interactive 2025", sf::Style::Fullscreen},
 	m_exitGame{false} //when true game will exit
 {
 	setupFontAndText(); // load font 
@@ -126,12 +126,10 @@ void Game::processKeys(sf::Event t_event)
 	if (sf::Keyboard::Down == t_event.key.code && subMenuOpen)
 	{
 		subMenuChecker = magic;
-		forward = true;
 	}
 	if (sf::Keyboard::Up == t_event.key.code && subMenuOpen)
 	{
 		subMenuChecker = fight;
-		forward = false;
 	}
 
 	if (sf::Keyboard::F2 == t_event.key.code)
@@ -204,10 +202,14 @@ void Game::render()
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_menuSprite);
 		m_window.draw(m_startSprite);
-		m_window.draw(m_endSprite);
+		m_window.draw(m_optionSprite);
 		m_window.draw(m_startButtonMessage);
-		m_window.draw(m_endButtonMessage);
+		m_window.draw(m_OptionButtonMessage);
 		m_window.draw(m_title);
+		if (optionsOpen == true)
+		{
+			m_window.draw(m_optionsMenuRect);
+		}
 	}
 
 	else if(currentState == preBattle)
@@ -291,9 +293,9 @@ void Game::setupSprite()
 	}
 
 	m_backgroundSprite.setTexture(m_backgroundTexture);
-	m_menuSprite.setTexture(m_menuTexture);
-
-	m_menuSprite.setTextureRect(sf::IntRect(0, 0, m_window.getSize().x, m_window.getSize().y));
+	m_menuSprite.setTexture(m_menuTexture);	
+	m_menuSprite.setScale(static_cast<float>(screenWidth) / 1920, static_cast<float> (screenHeight) / 1080);
+	std::cout << screenHeight << " and " << screenWidth << std::endl;
 }
 void Game::updateGameState()
 {
@@ -323,28 +325,33 @@ void Game::setupMenu()
 	}
 
 	m_startSprite.setTexture(m_buttonTexture);
-	m_startSprite.setPosition(940.0f,540.0f);
+	m_startSprite.setPosition((screenWidth / 2),540.0f);
 	m_startSprite.setOrigin(250.5f, 50.0f);
 
-	m_endSprite.setTexture(m_buttonTexture);
-	m_endSprite.setPosition(940.0f, 650.0f);
-	m_endSprite.setOrigin(250.5f, 50.0f);
+	m_optionSprite.setTexture(m_buttonTexture);
+	m_optionSprite.setPosition((screenWidth / 2), 650.0f);
+	m_optionSprite.setOrigin(250.5f, 50.0f);
 
 	m_startButtonMessage.setFont(m_ArialBlackfont);
 	m_startButtonMessage.setString("START");
-	m_startButtonMessage.setPosition(1135.f, 565.0f);
-	m_startButtonMessage.setOrigin(250.5f, 50.0f);
+	m_startButtonMessage.setPosition(screenWidth / 2, 565.0f);
+	m_startButtonMessage.setOrigin(0.0f, 0.0f);
 
-	m_endButtonMessage.setFont(m_ArialBlackfont);
-	m_endButtonMessage.setString("END");
-	m_endButtonMessage.setPosition(1135.f,675.0f);
-	m_endButtonMessage.setOrigin(230.75f, 50.0f);
+	m_OptionButtonMessage.setFont(m_ArialBlackfont);
+	m_OptionButtonMessage.setString("OPTIONS");
+	m_OptionButtonMessage.setPosition(screenWidth / 2, 650.0f);
+	m_OptionButtonMessage.setOrigin(0.0f, 0.0f);
 
 	m_title.setFont(m_ArialBlackfont);
 	m_title.setString("Petebound");
 	m_title.setPosition(693.0f, 300.0f);
 	m_title.setOrigin(2.75f, 50.0f);
 	m_title.setScale(3.0f, 3.0f);
+
+	m_optionsMenuRect.setPosition(screenWidth / 2, screenHeight / 2);
+	m_optionsMenuRect.setSize(sf::Vector2f(screenWidth / 2, screenHeight / 2));
+	m_optionsMenuRect.setOrigin(m_optionsMenuRect.getSize().x / 2.0f, m_optionsMenuRect.getSize().y / 2.0f);
+
 }
 
 void Game::drawMenu()
@@ -601,15 +608,13 @@ void Game::checkButtons()
 		m_startSprite.setColor(sf::Color::White);
 	}
 
-	if (m_endSprite.getGlobalBounds().contains(mousePosF))
+	if (m_optionSprite.getGlobalBounds().contains(mousePosF))
 	{
-		endHover = true;
-		m_endSprite.setColor(sf::Color(106,106,106, 255));
+		m_optionSprite.setColor(sf::Color(106,106,106, 255));
 	}
-	else if (!m_endSprite.getGlobalBounds().contains(mousePosF))
+	else if (!m_optionSprite.getGlobalBounds().contains(mousePosF))
 	{
-		endHover = false;
-		m_endSprite.setColor(sf::Color::White);
+		m_optionSprite.setColor(sf::Color::White);
 	}
 }
 

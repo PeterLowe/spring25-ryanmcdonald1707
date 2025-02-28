@@ -94,14 +94,17 @@ private:
 	sf::Font m_ArialBlackfont; // font used by message
 	sf::Text m_welcomeMessage; // text used for message on screen
 	bool m_exitGame; // control exiting game
-	bool click = false;
-	bool startHover = false;
-	bool endHover = false;
+
+
 
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosF;
 
 	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
+	bool startHover = false;
+	bool endHover = false;
+	bool optionsOpen = false;
+
 	sf::Text m_title;
 
 	sf::Texture m_menuTexture;
@@ -109,17 +112,19 @@ private:
 
 	sf::Text m_startButtonMessage;
 
-	sf::Text m_endButtonMessage;
+	sf::Text m_OptionButtonMessage;
 
 	sf::Texture m_buttonTexture;
 	sf::Sprite m_startSprite;
-	sf::Sprite m_endSprite;
+	sf::Sprite m_optionSprite;
 
+	sf::RectangleShape m_optionsMenuRect;
+
+	//TEXTURES, SPRITES AND VARIABLES FOR PREBATTLE
 	Direction m_heading;
 	sf::Vector2f m_location;
 	float m_speed{ 1.6f };
 
-	//TEXTURES, SPRITES AND VARIABLES FOR PREBATTLE
 	bool interactHover = false;
 	bool interactPressed = false;
 
@@ -168,6 +173,8 @@ private:
 	battleChecker subMenuChecker{none};
 	bool forward{ false };
 
+	unsigned screenWidth = sf::VideoMode::getDesktopMode().width;
+	unsigned screenHeight = sf::VideoMode::getDesktopMode().height;
 };
 
 #endif // !GAME_HPP
