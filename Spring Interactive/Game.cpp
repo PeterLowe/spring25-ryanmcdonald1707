@@ -100,7 +100,7 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Enter == t_event.key.code && enemySelected)
+	if (sf::Keyboard::Enter == t_event.key.code && !enemySelected)
 	{
 		subMenuOpen = true;
 	}
@@ -148,6 +148,17 @@ void Game::processMouseClick(sf::Event t_event)
 	{
 		currentState = preBattle;
 	}
+
+	if (optionHover == true)
+	{
+		optionsOpen = true;
+	}
+
+	if (optionEndHover == true)
+	{
+		optionsOpen = false;
+	}
+
 	if (endHover == true)
 	{
 		m_exitGame = true;
@@ -170,7 +181,6 @@ void Game::update(sf::Time t_deltaTime)
 	}
 	if (currentState == menu)
 	{
-		drawMenu();
 		checkButtons();
 	}
 	if (currentState == preBattle)
@@ -188,7 +198,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	getMousePos();
-	updateGameState();
+
 }
 
 /// <summary>
@@ -203,12 +213,17 @@ void Game::render()
 		m_window.draw(m_menuSprite);
 		m_window.draw(m_startSprite);
 		m_window.draw(m_optionSprite);
+		m_window.draw(m_endSprite);
 		m_window.draw(m_startButtonMessage);
 		m_window.draw(m_OptionButtonMessage);
+		m_window.draw(m_endButtonMessage);
 		m_window.draw(m_title);
 		if (optionsOpen == true)
 		{
 			m_window.draw(m_optionsMenuRect);
+			m_window.draw(m_resolutionDropdown);
+			m_window.draw(m_optionClose);
+			m_window.draw(m_optionCloseText);
 		}
 	}
 
@@ -298,25 +313,6 @@ void Game::setupSprite()
 	m_menuSprite.setScale(static_cast<float>(screenWidth) / 1920, static_cast<float> (screenHeight) / 1080);
 	std::cout << screenHeight << " and " << screenWidth << std::endl;
 }
-void Game::updateGameState()
-{
-	switch (currentState)
-	{
-		case menu:
-		{
-			drawMenu();	
-			break;
-		}
-		case preBattle:
-		{
-			break;
-		}
-		case battle:
-		{
-			break;
-		}
-	}
-}
 
 void Game::setupMenu()
 {
@@ -333,6 +329,10 @@ void Game::setupMenu()
 	m_optionSprite.setPosition((screenWidth / 2), 650.0f);
 	m_optionSprite.setOrigin(m_optionSprite.getLocalBounds().width / 2, m_optionSprite.getLocalBounds().height / 2);
 
+	m_endSprite.setTexture(m_buttonTexture);
+	m_endSprite.setPosition((screenWidth / 2), 760.0f);
+	m_endSprite.setOrigin(m_endSprite.getLocalBounds().width / 2, m_endSprite.getLocalBounds().height / 2);
+
 	m_startButtonMessage.setFont(m_ArialBlackfont);
 	m_startButtonMessage.setString("START");
 	m_startButtonMessage.setOrigin(m_startButtonMessage.getLocalBounds().width / 2, m_startButtonMessage.getLocalBounds().height / 2);
@@ -343,6 +343,11 @@ void Game::setupMenu()
 	m_OptionButtonMessage.setOrigin(m_OptionButtonMessage.getLocalBounds().width / 2, m_OptionButtonMessage.getLocalBounds().height / 2);
 	m_OptionButtonMessage.setPosition(screenWidth / 2, m_optionSprite.getPosition().y - 5);
 
+	m_endButtonMessage.setFont(m_ArialBlackfont);
+	m_endButtonMessage.setString("END");
+	m_endButtonMessage.setOrigin(m_endButtonMessage.getLocalBounds().width / 2, m_endButtonMessage.getLocalBounds().height / 2);
+	m_endButtonMessage.setPosition(screenWidth / 2, m_endSprite.getPosition().y - 5);
+
 	m_title.setFont(m_ArialBlackfont);
 	m_title.setString("Petebound");
 	m_title.setCharacterSize(120u);
@@ -350,13 +355,23 @@ void Game::setupMenu()
 	m_title.setOrigin(m_title.getLocalBounds().width / 2, m_title.getLocalBounds().height / 2);
 
 	m_optionsMenuRect.setPosition(screenWidth / 2, screenHeight / 2);
-	m_optionsMenuRect.setSize(sf::Vector2f(screenWidth / 2, screenHeight / 2));
+	m_optionsMenuRect.setSize(sf::Vector2f(screenWidth / 1.5, screenHeight / 1.5));
 	m_optionsMenuRect.setOrigin(m_optionsMenuRect.getSize().x / 2.0f, m_optionsMenuRect.getSize().y / 2.0f);
+	m_optionsMenuRect.setFillColor(sf::Color(0, 0, 0, 200));
 
-}
+	m_resolutionDropdown.setPosition(m_optionsMenuRect.getOrigin().x,m_optionsMenuRect.getOrigin().y);
+	m_resolutionDropdown.setSize(sf::Vector2f(screenWidth / 3, screenHeight / 9));
+	m_resolutionDropdown.setFillColor(sf::Color::Black);
 
-void Game::drawMenu()
-{
+	m_optionClose.setPosition(m_optionsMenuRect.getPosition() - m_optionsMenuRect.getOrigin());
+	m_optionClose.setSize(sf::Vector2f(50.0f,50.0f));
+	m_optionClose.setFillColor(sf::Color::Red);
+
+	m_optionCloseText.setFont(m_ArialBlackfont);
+	m_optionCloseText.setString("X");
+	m_optionCloseText.setCharacterSize(60u);
+	m_optionCloseText.setPosition(m_optionClose.getPosition().x + 24, m_optionClose.getPosition().y + 10);
+	m_optionCloseText.setOrigin(m_optionCloseText.getLocalBounds().width / 2, m_optionCloseText.getLocalBounds().height / 2);
 }
 
 void Game::setupPlayer()
@@ -520,6 +535,8 @@ void Game::interactWith()
 void Game::failsafe()
 {
 	startHover = false;
+	optionHover = false;
+	optionEndHover = false;
 	endHover = false;
 }
 
@@ -580,18 +597,16 @@ void Game::setupBattleMenu()
 
 void Game::enemySelect()
 {
-
 	if (enemyNum == 0)
 	{
-		enemySelected = true;
-		if (!enterPressed)
+		if (!enemySelected)
 		{
-			//blueValue = blueValue + 5;
-			//m_enemyPlaceholderSprite.setFillColor(sf::Color(255, 0, blueValue, 255));
+			blueValue = blueValue + 15;
+			m_enemyPlaceholderSprite.setColor(sf::Color(255, 255, blueValue, 255));
 		}
-		else
+		else if (enemySelected)
 		{
-			//m_enemyPlaceholderSprite.setFillColor(sf::Color::Red);
+			m_enemyPlaceholderSprite.setColor(sf::Color::White);
 		}
 	}
 	else
@@ -611,7 +626,7 @@ void Game::getMousePos()
 
 void Game::checkButtons()
 {
-	if (m_startSprite.getGlobalBounds().contains(mousePosF))
+	if (m_startSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
 	{
 		startHover = true;
 		m_startSprite.setColor(sf::Color(106, 106, 106, 255));
@@ -622,14 +637,37 @@ void Game::checkButtons()
 		m_startSprite.setColor(sf::Color::White);
 	}
 
-	if (m_optionSprite.getGlobalBounds().contains(mousePosF))
+	if (m_optionSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
 	{
+		optionHover = true;
 		m_optionSprite.setColor(sf::Color(106,106,106, 255));
 	}
 	else if (!m_optionSprite.getGlobalBounds().contains(mousePosF))
 	{
+		optionHover = false;
 		m_optionSprite.setColor(sf::Color::White);
 	}
+
+	if (m_optionCloseText.getGlobalBounds().contains(mousePosF))
+	{
+		optionEndHover = true;
+	}
+	else if (!m_optionCloseText.getGlobalBounds().contains(mousePosF))
+	{
+		optionEndHover = false;
+	}
+
+	if (m_endSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	{
+		endHover = true;
+		m_endSprite.setColor(sf::Color(106, 106, 106, 255));
+	}
+	else if (!m_endSprite.getGlobalBounds().contains(mousePosF))
+	{
+		endHover = false;
+		m_endSprite.setColor(sf::Color::White);
+	}
+
 }
 
 void Game::optionAnimate()

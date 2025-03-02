@@ -63,7 +63,6 @@ private:
 	void render();
 
 	//UNIVERSAL FUNCTIONS
-	void updateGameState();
 	void setupFontAndText();
 	void setupSprite();
 	void getMousePos();
@@ -71,7 +70,6 @@ private:
 
 	//FUNCTIONS FOR MENU
 	void setupMenu();
-	void drawMenu();
 
 	//FUNCTIONS FOR PREBATTLE
 	void setupPlayer();
@@ -95,14 +93,14 @@ private:
 	sf::Text m_welcomeMessage; // text used for message on screen
 	bool m_exitGame; // control exiting game
 
-
-
 	sf::Vector2i mousePos;
 	sf::Vector2f mousePosF;
 
 	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
 	bool startHover = false;
+	bool optionHover = false;
 	bool endHover = false;
+	bool optionEndHover = false;
 	bool optionsOpen = false;
 
 	sf::Text m_title;
@@ -114,11 +112,18 @@ private:
 
 	sf::Text m_OptionButtonMessage;
 
+	sf::Text m_endButtonMessage;
+
 	sf::Texture m_buttonTexture;
 	sf::Sprite m_startSprite;
 	sf::Sprite m_optionSprite;
+	sf::Sprite m_endSprite;
 
 	sf::RectangleShape m_optionsMenuRect;
+	sf::RectangleShape m_resolutionDropdown;
+	sf::RectangleShape m_optionClose;
+	sf::Text m_optionCloseText;
+
 
 	//TEXTURES, SPRITES AND VARIABLES FOR PREBATTLE
 	Direction m_heading;
