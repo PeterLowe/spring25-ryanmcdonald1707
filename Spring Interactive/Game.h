@@ -88,7 +88,7 @@ private:
 	void setupEnemy();
 	void setupBattleMenu();
 	void enemySelect();
-	void optionAnimate();
+	void optionAnimate(); //FLICKER SELECTABLE ENEMY
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -99,10 +99,13 @@ private:
 	sf::Vector2f mousePosF;
 
 	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
-	bool startHover = false;
+
+	bool startHover = false; //IF HOVERING OVER BUTTON, CAN CLICK.
 	bool optionHover = false;
 	bool endHover = false;
 	bool optionEndHover = false;
+
+
 	bool optionsOpen = false;
 
 	sf::Text m_title;
@@ -152,8 +155,9 @@ private:
 
 	sf::Texture m_enemyPlaceholderTexture;
 	sf::Sprite m_enemyPlaceholderSprite;
-
 	sf::Text m_enemyName;
+
+	//SPRITES,RECTS AND TEXT FOR THE BATTLE MENUS
 	sf::RectangleShape m_battleScreenRect;
 	sf::RectangleShape m_subMenu;
 	sf::RectangleShape m_Fight;
@@ -168,21 +172,23 @@ private:
 
 	sf::Vector2f m_enemyPos;
 
+	//BOOLEANS FOR MENU SELECTIONS
 	bool enemySelected{ false };
 	bool enterPressed{ false };
 	bool subMenuOpen{ false };
 	bool fightMenu{ false };
 	bool magicMenu{ false };
 
-	int enemyNum{ 0 };
+	int enemyNum{ 0 }; //Detects the picked enemy (for multiple enemy fights. 0 = first enemy, 1 = second, etc etc.)
 
 	int enemyHealth{ 100 };
 	sf::Text m_enemyHealthText;
 
 	int blueValue{ 0 };
-	battleChecker subMenuChecker{none};
+	battleChecker subMenuChecker{none}; //Checks the current Sub Menu. 
 	bool forward{ false };
 
+	//SUBMENUS
 };
 
 #endif // !GAME_HPP

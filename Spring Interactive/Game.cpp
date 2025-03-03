@@ -597,8 +597,8 @@ void Game::setupBattleMenu()
 	m_enemyName.setFillColor(sf::Color::White);
 
 	m_enemyHealthText.setFont(m_ArialBlackfont);
-	m_enemyHealthText.setString("HP: " + std::to_string(enemyHealth));
-	m_enemyHealthText.setScale(2.0f, 2.0f);
+	m_enemyHealthText.setString("ENEMY HP: " + std::to_string(enemyHealth));
+	m_enemyHealthText.setCharacterSize(50u);
 	m_enemyHealthText.setPosition(500.0f, 610.0f);
 
 
