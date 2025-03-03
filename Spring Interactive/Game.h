@@ -55,6 +55,8 @@ public:
 	gameState currentState = menu;
 
 private:
+	unsigned screenWidth = sf::VideoMode::getDesktopMode().width;
+	unsigned screenHeight = sf::VideoMode::getDesktopMode().height;
 
 	void processEvents();
 	void processKeys(sf::Event t_event);
@@ -159,13 +161,12 @@ private:
 	sf::RectangleShape m_Item;
 	sf::RectangleShape m_Bag;
 
-	sf::Text fightText;
-	sf::Text magicText;
-	sf::Text itemText;
-	sf::Text bagText;
+	sf::Text m_fightText;
+	sf::Text m_magicText;
+	sf::Text m_itemText;
+	sf::Text m_bagText;
 
 	sf::Vector2f m_enemyPos;
-
 
 	bool enemySelected{ false };
 	bool enterPressed{ false };
@@ -175,15 +176,13 @@ private:
 
 	int enemyNum{ 0 };
 
-	int enemyHealth{ 69 };
+	int enemyHealth{ 100 };
 	sf::Text m_enemyHealthText;
 
 	int blueValue{ 0 };
 	battleChecker subMenuChecker{none};
 	bool forward{ false };
 
-	unsigned screenWidth = sf::VideoMode::getDesktopMode().width;
-	unsigned screenHeight = sf::VideoMode::getDesktopMode().height;
 };
 
 #endif // !GAME_HPP

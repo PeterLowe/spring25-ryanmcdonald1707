@@ -103,6 +103,7 @@ void Game::processKeys(sf::Event t_event)
 	if (sf::Keyboard::Enter == t_event.key.code && !enemySelected)
 	{
 		subMenuOpen = true;
+		enemySelected = true;
 	}
 
 	if (sf::Keyboard::Enter == t_event.key.code && subMenuChecker == fight)
@@ -252,7 +253,9 @@ void Game::render()
 			m_window.draw(m_enemyName);
 			m_window.draw(m_enemyHealthText);
 			m_window.draw(m_Fight);
+			m_window.draw(m_fightText);
 			m_window.draw(m_Magic);
+			m_window.draw(m_magicText);
 		}
 		if (!subMenuOpen && subMenuChecker == fight)
 		{
@@ -287,13 +290,6 @@ void Game::setupFontAndText()
 		std::cout << "problem loading arial black font" << std::endl;
 	}
 	m_welcomeMessage.setFont(m_ArialBlackfont);
-	m_welcomeMessage.setString("SFML Game");
-	m_welcomeMessage.setStyle(sf::Text::Underlined | sf::Text::Italic | sf::Text::Bold);
-	m_welcomeMessage.setPosition(40.0f, 40.0f);
-	m_welcomeMessage.setCharacterSize(80U);
-	m_welcomeMessage.setOutlineColor(sf::Color::Red);
-	m_welcomeMessage.setFillColor(sf::Color::Black);
-	m_welcomeMessage.setOutlineThickness(3.0f);
 
 }
 
@@ -310,8 +306,7 @@ void Game::setupSprite()
 
 	m_backgroundSprite.setTexture(m_backgroundTexture);
 	m_menuSprite.setTexture(m_menuTexture);	
-	m_menuSprite.setScale(static_cast<float>(screenWidth) / 1920, static_cast<float> (screenHeight) / 1080);
-	std::cout << screenHeight << " and " << screenWidth << std::endl;
+	m_menuSprite.setScale(screenWidth / 1920.0f,screenHeight/ 1080.0f);
 }
 
 void Game::setupMenu()
@@ -532,7 +527,7 @@ void Game::interactWith()
 
 
 //BATTLE FUNCTIONS
-void Game::failsafe()
+void Game::failsafe() // MAKES SURE NO BUTTONS CAN BE CLICKED SOMEHOW WHEN GAME STATE CHANGES.
 {
 	startHover = false;
 	optionHover = false;
@@ -581,14 +576,28 @@ void Game::setupBattleMenu()
 	m_Magic.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Magic.setFillColor(sf::Color::Blue);
 
+	m_fightText.setFont(m_ArialBlackfont);
+	m_fightText.setString("FIGHT");
+	m_fightText.setCharacterSize(51u);
+	m_fightText.setOrigin(m_fightText.getLocalBounds().width / 2, m_fightText.getLocalBounds().height / 2);
+	m_fightText.setPosition(m_Fight.getPosition().x + 331.5f, m_Fight.getPosition().y + 37);
+
+	m_magicText.setFont(m_ArialBlackfont);
+	m_magicText.setString("MAGIC");
+	m_magicText.setCharacterSize(51u);
+	m_magicText.setOrigin(m_magicText.getLocalBounds().width / 2, m_magicText.getLocalBounds().height / 2);
+	m_magicText.setPosition(m_Magic.getPosition().x + 331.5f, m_Magic.getPosition().y + 37);
+
 	m_enemyName.setFont(m_ArialBlackfont);
+	m_enemyName.setOrigin(m_enemyName.getLocalBounds().width / 2, m_enemyName.getLocalBounds().height / 2);
+	m_enemyName.setPosition(m_battleScreenRect.getPosition());
 	m_enemyName.setScale(2.0f,2.0f);
+
 	m_enemyName.setString("PETER");
 	m_enemyName.setFillColor(sf::Color::White);
-	m_enemyName.setPosition(20.0f, 610.0f);
 
 	m_enemyHealthText.setFont(m_ArialBlackfont);
-	m_enemyHealthText.setString(std::to_string(enemyHealth));
+	m_enemyHealthText.setString("HP: " + std::to_string(enemyHealth));
 	m_enemyHealthText.setScale(2.0f, 2.0f);
 	m_enemyHealthText.setPosition(500.0f, 610.0f);
 
