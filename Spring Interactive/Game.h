@@ -100,6 +100,7 @@ private:
 	void failsafe();
 	void setupEnemy();
 	void setupBattleMenu();
+
 	void enemySelect();
 	void optionSelect();
 	void optionAnimate(); //FLICKER SELECTABLE ENEMY
@@ -223,8 +224,11 @@ private:
 
 	//ENEMY TURN THINGS
 	bool enemyAttacking{ false };
+	bool canAttack{ true };
 	sf::Text enemyAbilityText;
 	enemyAbilities enemyAbilityChecker{slash};
+
+
 };
 
 #endif // !GAME_HPP

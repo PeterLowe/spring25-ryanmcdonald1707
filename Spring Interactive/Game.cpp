@@ -262,23 +262,29 @@ void Game::render()
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
+			m_window.draw(m_playerHealthText);
 			m_window.draw(m_Fight);
 			m_window.draw(m_fightText);
 			m_window.draw(m_Magic);
 			m_window.draw(m_magicText);
-			m_window.draw(m_playerHealthText);
-
 		}
 		if (!subMenuOpen && subMenuChecker == fight && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
-			m_window.draw(m_enemyName);
+			if (!enemyAttacking)
+			{
+				m_window.draw(m_enemyName);
+				m_window.draw(m_playerHealthText);
+			}
+			else
+			{
+				m_window.draw(enemyAbilityText);
+			}
 			m_window.draw(m_Fstab);
 			m_window.draw(m_FstabText);
 			m_window.draw(m_Fcrush);
 			m_window.draw(m_FcrushText);
-			m_window.draw(m_playerHealthText);
 		}
 		else if (!subMenuOpen && subMenuChecker == magic && enemySelected)
 		{
@@ -697,6 +703,7 @@ void Game::setupBattleMenu()
 	m_FcrushText.setPosition(m_Fcrush.getPosition().x + 331.5f, m_Fcrush.getPosition().y + 37);
 
 	enemyAbilityText.setFont(m_ArialBlackfont);
+	enemyAbilityText.setPosition(m_battleScreenRect.getPosition());
 }
 
 void Game::enemySelect()
@@ -804,16 +811,16 @@ void Game::playerAttack()
 	if (enemyHealth > 0)
 	{
 		enemyHealth = enemyHealth - 15;
-		if (enemyHealth < 0)
-		{
-			enemyHealth = 0;
-			enemySelected = false;
-			enemyDead = true;
-			subMenuChecker = NONE;
-			fightMenuChecker = pacifist;
-		}
-		m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 75));
 	}
+	else if (enemyHealth < 0)
+	{
+		enemyHealth = 0;
+		enemySelected = false;
+		enemyDead = true;
+		subMenuChecker = NONE;
+		fightMenuChecker = pacifist;
+	}
+	m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 75));
 
 	enemyTurn();
 }
@@ -829,7 +836,6 @@ void Game::enemyAttack()
 	enemyAbilityText.setString("SLASH");
 	playerHealth = playerHealth - 10;
 	m_playerHealthText.setString("PLAYER HP: " + std::to_string(playerHealth));
-	enemyAttacking = false;
 }
 
 
