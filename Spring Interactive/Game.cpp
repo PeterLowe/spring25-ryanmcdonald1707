@@ -121,6 +121,10 @@ void Game::processKeys(sf::Event t_event)
 	{
 		playerAttack();
 	}
+	if (sf::Keyboard::Enter == t_event.key.code && fightMenuChecker == crush)
+	{
+		playerAttack();
+	}
 
 	if (sf::Keyboard::Escape == t_event.key.code && currentState == battle )
 	{
@@ -252,6 +256,7 @@ void Game::render()
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_battleBackgroundSprite);
 		m_window.draw(m_enemyPlaceholderSprite);
+		m_window.draw(m_enemyHealthRect);
 		if (subMenuOpen == true && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
@@ -665,6 +670,11 @@ void Game::setupBattleMenu()
 	m_enemyHealthText.setCharacterSize(50u);
 	m_enemyHealthText.setPosition(500.0f, 610.0f);
 
+	m_enemyHealthRect.setFillColor(sf::Color::Green);
+	m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 70));
+	m_enemyHealthRect.setOrigin(m_enemyHealthRect.getLocalBounds().width / 2,m_enemyHealthRect.getLocalBounds().height / 2);
+	m_enemyHealthRect.setPosition(m_enemyPlaceholderSprite.getPosition().x, m_enemyPlaceholderSprite.getPosition().y - 375);
+
 	m_Fstab.setPosition(1220.0f, 615.0f);
 	m_Fstab.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Fstab.setFillColor(sf::Color::Blue);
@@ -800,6 +810,7 @@ void Game::playerAttack()
 			fightMenuChecker = pacifist;
 		}
 		m_enemyHealthText.setString("ENEMY HP: " + std::to_string(enemyHealth));
+		m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 75));
 	}
 }
 

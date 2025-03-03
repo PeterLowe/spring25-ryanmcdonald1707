@@ -193,6 +193,10 @@ private:
 
 	int enemyHealth{ 100 };
 	sf::Text m_enemyHealthText;
+	sf::RectangleShape m_enemyHealthRect;
+
+	int playerHealth{ 100 };
+	sf::Text m_playerHealthText;
 
 	int blueValue{ 0 };
 	battleChecker subMenuChecker{NONE}; //Checks the current Sub Menu. 
