@@ -100,7 +100,7 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Enter == t_event.key.code && !enemySelected)
+	if (sf::Keyboard::Enter == t_event.key.code && !enemySelected && !enemyDead)
 	{
 		subMenuOpen = true;
 		enemySelected = true;
@@ -117,21 +117,27 @@ void Game::processKeys(sf::Event t_event)
 		subMenuOpen = false;
 	}
 
+	if (sf::Keyboard::Enter == t_event.key.code && fightMenuChecker == stab)
+	{
+		playerAttack();
+	}
+
 	if (sf::Keyboard::Escape == t_event.key.code && currentState == battle )
 	{
 		subMenuOpen = true;
-		subMenuChecker = none;
 	}
 
-
-	if (sf::Keyboard::Down == t_event.key.code && subMenuOpen)
+	if (sf::Keyboard::Up == t_event.key.code && currentState == battle && !enemyDead)
 	{
-		subMenuChecker = magic;
+		currentChoice = currentChoice--;
+		optionSelect();
 	}
-	if (sf::Keyboard::Up == t_event.key.code && subMenuOpen)
+	if (sf::Keyboard::Down == t_event.key.code && currentState == battle && !enemyDead)
 	{
-		subMenuChecker = fight;
+		currentChoice = currentChoice++;
+		optionSelect();
 	}
+	
 
 	if (sf::Keyboard::F2 == t_event.key.code)
 	{
@@ -246,7 +252,7 @@ void Game::render()
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_battleBackgroundSprite);
 		m_window.draw(m_enemyPlaceholderSprite);
-		if (subMenuOpen == true)
+		if (subMenuOpen == true && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
@@ -257,14 +263,18 @@ void Game::render()
 			m_window.draw(m_Magic);
 			m_window.draw(m_magicText);
 		}
-		if (!subMenuOpen && subMenuChecker == fight)
+		if (!subMenuOpen && subMenuChecker == fight && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
 			m_window.draw(m_enemyHealthText);
+			m_window.draw(m_Fstab);
+			m_window.draw(m_FstabText);
+			m_window.draw(m_Fcrush);
+			m_window.draw(m_FcrushText);
 		}
-		else if (!subMenuOpen && subMenuChecker == magic)
+		else if (!subMenuOpen && subMenuChecker == magic && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
@@ -307,6 +317,14 @@ void Game::setupSprite()
 	m_backgroundSprite.setTexture(m_backgroundTexture);
 	m_menuSprite.setTexture(m_menuTexture);	
 	m_menuSprite.setScale(screenWidth / 1920.0f,screenHeight/ 1080.0f);
+}
+
+void Game::getMousePos()
+{
+	mousePos = sf::Mouse::getPosition(m_window);
+	float mouseX = mousePos.x;
+	float mouseY = mousePos.y;
+	mousePosF = sf::Vector2f(mouseX, mouseY);
 }
 
 void Game::setupMenu()
@@ -367,6 +385,52 @@ void Game::setupMenu()
 	m_optionCloseText.setCharacterSize(60u);
 	m_optionCloseText.setPosition(m_optionClose.getPosition().x + 24, m_optionClose.getPosition().y + 10);
 	m_optionCloseText.setOrigin(m_optionCloseText.getLocalBounds().width / 2, m_optionCloseText.getLocalBounds().height / 2);
+}
+
+void Game::checkButtons()
+{
+	if (m_startSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	{
+		startHover = true;
+		m_startSprite.setColor(sf::Color(106, 106, 106, 255));
+	}
+	else if (!m_startSprite.getGlobalBounds().contains(mousePosF))
+	{
+		startHover = false;
+		m_startSprite.setColor(sf::Color::White);
+	}
+
+	if (m_optionSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	{
+		optionHover = true;
+		m_optionSprite.setColor(sf::Color(106, 106, 106, 255));
+	}
+	else if (!m_optionSprite.getGlobalBounds().contains(mousePosF))
+	{
+		optionHover = false;
+		m_optionSprite.setColor(sf::Color::White);
+	}
+
+	if (m_optionCloseText.getGlobalBounds().contains(mousePosF))
+	{
+		optionEndHover = true;
+	}
+	else if (!m_optionCloseText.getGlobalBounds().contains(mousePosF))
+	{
+		optionEndHover = false;
+	}
+
+	if (m_endSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	{
+		endHover = true;
+		m_endSprite.setColor(sf::Color(106, 106, 106, 255));
+	}
+	else if (!m_endSprite.getGlobalBounds().contains(mousePosF))
+	{
+		endHover = false;
+		m_endSprite.setColor(sf::Color::White);
+	}
+
 }
 
 void Game::setupPlayer()
@@ -601,14 +665,32 @@ void Game::setupBattleMenu()
 	m_enemyHealthText.setCharacterSize(50u);
 	m_enemyHealthText.setPosition(500.0f, 610.0f);
 
+	m_Fstab.setPosition(1220.0f, 615.0f);
+	m_Fstab.setSize(sf::Vector2f(663.0f, 100.0f));
+	m_Fstab.setFillColor(sf::Color::Blue);
 
+	m_FstabText.setFont(m_ArialBlackfont);
+	m_FstabText.setString("STAB");
+	m_FstabText.setCharacterSize(51u);
+	m_FstabText.setOrigin(m_FstabText.getLocalBounds().width / 2, m_FstabText.getLocalBounds().height / 2);
+	m_FstabText.setPosition(m_Fstab.getPosition().x + 331.5f, m_Fstab.getPosition().y + 37);
+
+	m_Fcrush.setPosition(1220.0f, 745.0f);
+	m_Fcrush.setSize(sf::Vector2f(663.0f, 100.0f));
+	m_Fcrush.setFillColor(sf::Color::Blue);
+
+	m_FcrushText.setFont(m_ArialBlackfont);
+	m_FcrushText.setString("CRUSH");
+	m_FcrushText.setCharacterSize(51u);
+	m_FcrushText.setOrigin(m_FcrushText.getLocalBounds().width / 2, m_FcrushText.getLocalBounds().height / 2);
+	m_FcrushText.setPosition(m_Fcrush.getPosition().x + 331.5f, m_Fcrush.getPosition().y + 37);
 }
 
 void Game::enemySelect()
 {
 	if (enemyNum == 0)
 	{
-		if (!enemySelected)
+		if (!enemySelected && !enemyDead)
 		{
 			blueValue = blueValue + 15;
 			m_enemyPlaceholderSprite.setColor(sf::Color(255, 255, blueValue, 255));
@@ -617,67 +699,53 @@ void Game::enemySelect()
 		{
 			m_enemyPlaceholderSprite.setColor(sf::Color::White);
 		}
-	}
-	else
-	{
-		enemySelected = false;
+		else
+		{
+			m_enemyPlaceholderSprite.setColor(sf::Color::Red);
+		}
 	}
 
 }
 
-void Game::getMousePos()
+void Game::optionSelect()
 {
-	mousePos = sf::Mouse::getPosition(m_window);
-	float mouseX = mousePos.x;
-	float mouseY = mousePos.y;
-	mousePosF = sf::Vector2f(mouseX, mouseY);
+	if (currentChoice < 0 )
+	{
+		currentChoice = 1;
+	}
+	else if (currentChoice > 1)
+	{
+		currentChoice = 0;
+	}
+
+	std::cout << currentChoice << std::endl;
+
+	if (subMenuOpen)
+	{
+		switch (currentChoice)
+		{
+		case 0:
+			subMenuChecker = fight;
+			break;
+		case 1:
+			subMenuChecker = magic;
+			break;
+		}
+	}
+	else if (fightMenu)
+	{
+		switch (currentChoice)
+		{
+		case 0:
+			fightMenuChecker = stab;
+			break;
+		case 1:
+			fightMenuChecker = crush;
+			break;
+		}
+	}
 }
 
-void Game::checkButtons()
-{
-	if (m_startSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
-	{
-		startHover = true;
-		m_startSprite.setColor(sf::Color(106, 106, 106, 255));
-	}
-	else if (!m_startSprite.getGlobalBounds().contains(mousePosF))
-	{
-		startHover = false;
-		m_startSprite.setColor(sf::Color::White);
-	}
-
-	if (m_optionSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
-	{
-		optionHover = true;
-		m_optionSprite.setColor(sf::Color(106,106,106, 255));
-	}
-	else if (!m_optionSprite.getGlobalBounds().contains(mousePosF))
-	{
-		optionHover = false;
-		m_optionSprite.setColor(sf::Color::White);
-	}
-
-	if (m_optionCloseText.getGlobalBounds().contains(mousePosF))
-	{
-		optionEndHover = true;
-	}
-	else if (!m_optionCloseText.getGlobalBounds().contains(mousePosF))
-	{
-		optionEndHover = false;
-	}
-
-	if (m_endSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
-	{
-		endHover = true;
-		m_endSprite.setColor(sf::Color(106, 106, 106, 255));
-	}
-	else if (!m_endSprite.getGlobalBounds().contains(mousePosF))
-	{
-		endHover = false;
-		m_endSprite.setColor(sf::Color::White);
-	}
-
-}
 
 void Game::optionAnimate()
 {
@@ -698,7 +766,44 @@ void Game::optionAnimate()
 	{
 		m_Magic.setFillColor(sf::Color::Blue);
 	}
+
+
+	if (fightMenuChecker == stab)
+	{
+		m_Fstab.setFillColor(sf::Color(106, 106, 106, 255));
+	}
+	else
+	{
+		m_Fstab.setFillColor(sf::Color::Blue);
+	}
+	if (fightMenuChecker == crush)
+	{
+		m_Fcrush.setFillColor(sf::Color(106, 106, 106, 255));
+	}
+	else
+	{
+		m_Fcrush.setFillColor(sf::Color::Blue);
+	}
 }
+
+void Game::playerAttack()
+{
+	if (enemyHealth > 0)
+	{
+		enemyHealth = enemyHealth - 15;
+		if (enemyHealth < 0)
+		{
+			enemyHealth = 0;
+			enemySelected = false;
+			enemyDead = true;
+			subMenuChecker = NONE;
+			fightMenuChecker = pacifist;
+		}
+		m_enemyHealthText.setString("ENEMY HP: " + std::to_string(enemyHealth));
+	}
+}
+
+
 
 
 

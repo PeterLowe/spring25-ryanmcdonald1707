@@ -31,15 +31,22 @@ enum gameState
 {
 	menu,
 	preBattle,
-	battle
+	battle,
+	gameOver
 };
 
 enum battleChecker
 {
-	none,
+	NONE,
 	fight,
 	magic,
-	MAX,
+};
+
+enum fightAbilities
+{
+	pacifist,
+	stab,
+	crush,
 };
 
 class Game
@@ -88,7 +95,10 @@ private:
 	void setupEnemy();
 	void setupBattleMenu();
 	void enemySelect();
+	void optionSelect();
 	void optionAnimate(); //FLICKER SELECTABLE ENEMY
+	void playerAttack();
+
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_ArialBlackfont; // font used by message
@@ -175,7 +185,7 @@ private:
 	//BOOLEANS FOR MENU SELECTIONS
 	bool enemySelected{ false };
 	bool enterPressed{ false };
-	bool subMenuOpen{ false };
+	bool subMenuOpen{ true };
 	bool fightMenu{ false };
 	bool magicMenu{ false };
 
@@ -185,10 +195,18 @@ private:
 	sf::Text m_enemyHealthText;
 
 	int blueValue{ 0 };
-	battleChecker subMenuChecker{none}; //Checks the current Sub Menu. 
-	bool forward{ false };
+	battleChecker subMenuChecker{NONE}; //Checks the current Sub Menu. 
+	fightAbilities fightMenuChecker{pacifist};
 
+	int currentChoice{ 0 }; //Gets number of current choice without having to convert an enum to an int. Bandaid solution, will fix in final iteration.
+
+	bool enemyDead{ false };
 	//SUBMENUS
+	sf::RectangleShape m_Fstab;
+	sf::Text m_FstabText;
+
+	sf::RectangleShape m_Fcrush;
+	sf::Text m_FcrushText;
 };
 
 #endif // !GAME_HPP
