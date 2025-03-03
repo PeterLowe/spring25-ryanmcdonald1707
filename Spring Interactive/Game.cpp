@@ -262,29 +262,30 @@ void Game::render()
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
-			m_window.draw(m_enemyHealthText);
 			m_window.draw(m_Fight);
 			m_window.draw(m_fightText);
 			m_window.draw(m_Magic);
 			m_window.draw(m_magicText);
+			m_window.draw(m_playerHealthText);
+
 		}
 		if (!subMenuOpen && subMenuChecker == fight && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
-			m_window.draw(m_enemyHealthText);
 			m_window.draw(m_Fstab);
 			m_window.draw(m_FstabText);
 			m_window.draw(m_Fcrush);
 			m_window.draw(m_FcrushText);
+			m_window.draw(m_playerHealthText);
 		}
 		else if (!subMenuOpen && subMenuChecker == magic && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
 			m_window.draw(m_enemyName);
-			m_window.draw(m_enemyHealthText);
+			m_window.draw(m_playerHealthText);
 		}
 	}
 	else
@@ -367,7 +368,7 @@ void Game::setupMenu()
 	m_endButtonMessage.setPosition(screenWidth / 2, m_endSprite.getPosition().y - 5);
 
 	m_title.setFont(m_ArialBlackfont);
-	m_title.setString("Petebound");
+	m_title.setString("PETEBOUND");
 	m_title.setCharacterSize(120u);
 	m_title.setPosition(screenWidth / 2, 300.0f);
 	m_title.setOrigin(m_title.getLocalBounds().width / 2, m_title.getLocalBounds().height / 2);
@@ -665,10 +666,10 @@ void Game::setupBattleMenu()
 	m_enemyName.setString("PETER");
 	m_enemyName.setFillColor(sf::Color::White);
 
-	m_enemyHealthText.setFont(m_ArialBlackfont);
-	m_enemyHealthText.setString("ENEMY HP: " + std::to_string(enemyHealth));
-	m_enemyHealthText.setCharacterSize(50u);
-	m_enemyHealthText.setPosition(500.0f, 610.0f);
+	m_playerHealthText.setFont(m_ArialBlackfont);
+	m_playerHealthText.setCharacterSize(50u);
+	m_playerHealthText.setString("PLAYER HP: " + std::to_string(playerHealth));
+	m_playerHealthText.setPosition(m_battleScreenRect.getPosition().x + 400, m_battleScreenRect.getPosition().y + 10);
 
 	m_enemyHealthRect.setFillColor(sf::Color::Green);
 	m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 70));
@@ -694,6 +695,8 @@ void Game::setupBattleMenu()
 	m_FcrushText.setCharacterSize(51u);
 	m_FcrushText.setOrigin(m_FcrushText.getLocalBounds().width / 2, m_FcrushText.getLocalBounds().height / 2);
 	m_FcrushText.setPosition(m_Fcrush.getPosition().x + 331.5f, m_Fcrush.getPosition().y + 37);
+
+	enemyAbilityText.setFont(m_ArialBlackfont);
 }
 
 void Game::enemySelect()
@@ -809,9 +812,24 @@ void Game::playerAttack()
 			subMenuChecker = NONE;
 			fightMenuChecker = pacifist;
 		}
-		m_enemyHealthText.setString("ENEMY HP: " + std::to_string(enemyHealth));
 		m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 75));
 	}
+
+	enemyTurn();
+}
+
+void Game::enemyTurn()
+{
+	enemyAttacking = true;
+	enemyAttack();
+}
+
+void Game::enemyAttack()
+{
+	enemyAbilityText.setString("SLASH");
+	playerHealth = playerHealth - 10;
+	m_playerHealthText.setString("PLAYER HP: " + std::to_string(playerHealth));
+	enemyAttacking = false;
 }
 
 

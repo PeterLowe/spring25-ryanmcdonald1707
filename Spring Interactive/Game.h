@@ -49,6 +49,12 @@ enum fightAbilities
 	crush,
 };
 
+enum enemyAbilities
+{
+	slash,
+	meow,
+};
+
 class Game
 {
 public:
@@ -98,6 +104,8 @@ private:
 	void optionSelect();
 	void optionAnimate(); //FLICKER SELECTABLE ENEMY
 	void playerAttack();
+	void enemyTurn();
+	void enemyAttack();
 
 
 	sf::RenderWindow m_window; // main SFML window
@@ -192,7 +200,6 @@ private:
 	int enemyNum{ 0 }; //Detects the picked enemy (for multiple enemy fights. 0 = first enemy, 1 = second, etc etc.)
 
 	int enemyHealth{ 100 };
-	sf::Text m_enemyHealthText;
 	sf::RectangleShape m_enemyHealthRect;
 
 	int playerHealth{ 100 };
@@ -204,13 +211,20 @@ private:
 
 	int currentChoice{ 0 }; //Gets number of current choice without having to convert an enum to an int. Bandaid solution, will fix in final iteration.
 
-	bool enemyDead{ false };
+	bool enemyDead{ false }; //For checking if sans has been murdered.
+
+
 	//SUBMENUS
 	sf::RectangleShape m_Fstab;
 	sf::Text m_FstabText;
 
 	sf::RectangleShape m_Fcrush;
 	sf::Text m_FcrushText;
+
+	//ENEMY TURN THINGS
+	bool enemyAttacking{ false };
+	sf::Text enemyAbilityText;
+	enemyAbilities enemyAbilityChecker{slash};
 };
 
 #endif // !GAME_HPP
