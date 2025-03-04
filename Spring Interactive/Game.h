@@ -10,6 +10,7 @@
 /// Don't forget the endif at the bottom
 /// </summary>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <time.h>
 
 enum Direction
@@ -105,6 +106,10 @@ private:
 	void playerAttack();
 	void enemyTurn();
 	void enemyAttack();
+
+	//FUNCTIONS FOR AUDIO
+	bool loadMusic();
+	void playMusic();
 
 
 	sf::RenderWindow m_window; // main SFML window
@@ -222,11 +227,14 @@ private:
 
 	//ENEMY TURN THINGS
 	bool m_enemyAttacking{ false };
+	bool m_canAttack{ true };
 	sf::Text m_enemyAbilityText;
 	enemyAbilities m_enemyAbilityChecker{slash};
 	sf::Clock m_enemyAttackClock;
 
-
+	//MUSIC AND SOUND EFFECTS
+	sf::Music m_menuMusic;
+	bool m_musicPlaying = false;
 };
 
 #endif // !GAME_HPP

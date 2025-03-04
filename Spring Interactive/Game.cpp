@@ -24,6 +24,7 @@ Game::Game() :
 	setupButtons();
 	setupEnemy();
 	setupBattleMenu();
+	loadMusic();
 }
 
 /// <summary>
@@ -48,6 +49,7 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	const float fps{ 60.0f };
 	sf::Time timePerFrame = sf::seconds(1.0f / fps); // 60 fps
+
 	while (m_window.isOpen())
 	{
 		processEvents(); // as many as possible
@@ -114,11 +116,15 @@ void Game::processKeys(sf::Event t_event)
 		subMenuOpen = false;
 	}
 
-	if (sf::Keyboard::Enter == t_event.key.code && m_fightMenuChecker == stab) //Initiate Stab Attack
+	if (sf::Keyboard::Enter == t_event.key.code 
+		&& m_fightMenuChecker == stab
+		&& m_canAttack) //Initiate Stab Attack
 	{
 		playerAttack();
 	}
-	if (sf::Keyboard::Enter == t_event.key.code && m_fightMenuChecker == crush) //Initiate Crush Attack
+	if (sf::Keyboard::Enter == t_event.key.code 
+		&& m_fightMenuChecker == crush
+		&& m_canAttack) //Initiate Crush Attack
 	{
 		playerAttack();
 	}
@@ -187,6 +193,7 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
+
 	if (currentState == menu)
 	{
 		checkButtons();
@@ -205,9 +212,15 @@ void Game::update(sf::Time t_deltaTime)
 		optionAnimate();
 	}
 
-	if (m_enemyAttackClock.getElapsedTime().asSeconds() >= 5)
+	if (m_enemyAttackClock.getElapsedTime().asSeconds() >= 3)
 	{
+		m_canAttack = true;
 		m_enemyAttacking = false;
+	}
+
+	if (!m_musicPlaying)
+	{
+		playMusic();
 	}
 
 	getMousePos();
@@ -831,6 +844,7 @@ void Game::playerAttack()
 void Game::enemyTurn()
 {
 	m_enemyAttacking = true;
+	m_canAttack = false;
 	enemyAttack();
 }
 
@@ -840,6 +854,30 @@ void Game::enemyAttack()
 	m_playerHealth = m_playerHealth - 10;
 	m_playerHealthText.setString("PLAYER HP: " + std::to_string(m_playerHealth));
 	m_enemyAttackClock.restart();
+}
+
+bool Game::loadMusic()
+{
+	if (!m_menuMusic.openFromFile("ASSETS//AUDIO//MENUMUSIC.wav"))
+	{
+		return false;
+	}
+
+	m_menuMusic.setLoop(true);
+	m_menuMusic.setVolume(75);
+
+	return true;
+}
+
+void Game::playMusic()
+{
+	switch (currentState)
+	{
+		case menu:
+			m_menuMusic.play();
+			m_musicPlaying = true;
+	}
+
 }
 
 
