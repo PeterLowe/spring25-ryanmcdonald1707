@@ -1,5 +1,5 @@
 /// <summary>
-/// author Pete Lowe May 2022
+/// author Ryan McDonald 2024
 /// you need to change the above line or lose marks
 /// </summary>
 #ifndef GAME_HPP
