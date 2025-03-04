@@ -11,8 +11,6 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 #include <time.h>
-#include <fstream>
-#include <vector>
 
 enum Direction
 {
@@ -114,18 +112,18 @@ private:
 	sf::Text m_welcomeMessage; // text used for message on screen
 	bool m_exitGame; // control exiting game
 
-	sf::Vector2i mousePos;
-	sf::Vector2f mousePosF;
+	sf::Vector2i m_mousePos;
+	sf::Vector2f m_mousePosF;
 
 	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
 
-	bool startHover = false; //IF HOVERING OVER BUTTON, CAN CLICK.
-	bool optionHover = false;
-	bool endHover = false;
-	bool optionEndHover = false;
+	bool m_startHover = false; //IF HOVERING OVER BUTTON, CAN CLICK.
+	bool m_optionHover = false;
+	bool m_endHover = false;
+	bool m_optionEndHover = false;
 
 
-	bool optionsOpen = false;
+	bool m_optionsOpen = false;
 
 	sf::Text m_title;
 
@@ -154,8 +152,8 @@ private:
 	sf::Vector2f m_location;
 	float m_speed{ 1.6f };
 
-	bool interactHover = false;
-	bool interactPressed = false;
+	bool m_interactHover = false;
+	bool m_interactPressed = false;
 
 	sf::Texture m_backgroundTexture;
 	sf::Sprite m_backgroundSprite;
@@ -198,21 +196,21 @@ private:
 	bool fightMenu{ false };
 	bool magicMenu{ false };
 
-	int enemyNum{ 0 }; //Detects the picked enemy (for multiple enemy fights. 0 = first enemy, 1 = second, etc etc.)
+	int m_enemyNum{ 0 }; //Detects the picked enemy (for multiple enemy fights. 0 = first enemy, 1 = second, etc etc.)
 
-	int enemyHealth{ 100 };
+	int m_enemyHealth{ 100 };
 	sf::RectangleShape m_enemyHealthRect;
 
-	int playerHealth{ 100 };
+	int m_playerHealth{ 100 };
 	sf::Text m_playerHealthText;
 
-	int blueValue{ 0 };
-	battleChecker subMenuChecker{NONE}; //Checks the current Sub Menu. 
-	fightAbilities fightMenuChecker{pacifist};
+	int m_blueValue{ 0 };
+	battleChecker m_subMenuChecker{NONE}; //Checks the current Sub Menu. 
+	fightAbilities m_fightMenuChecker{pacifist};
 
-	int currentChoice{ 0 }; //Gets number of current choice without having to convert an enum to an int. Bandaid solution, will fix in final iteration.
+	int m_currentChoice{ 0 }; //Gets number of current choice without having to convert an enum to an int. Bandaid solution, will fix in final iteration.
 
-	bool enemyDead{ false }; //For checking if sans has been murdered.
+	bool m_enemyDead{ false }; //For checking if sans has been murdered.
 
 
 	//SUBMENUS
@@ -223,10 +221,10 @@ private:
 	sf::Text m_FcrushText;
 
 	//ENEMY TURN THINGS
-	bool enemyAttacking{ false };
-	bool canAttack{ true };
-	sf::Text enemyAbilityText;
-	enemyAbilities enemyAbilityChecker{slash};
+	bool m_enemyAttacking{ false };
+	sf::Text m_enemyAbilityText;
+	enemyAbilities m_enemyAbilityChecker{slash};
+	sf::Clock m_enemyAttackClock;
 
 
 };

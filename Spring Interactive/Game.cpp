@@ -5,9 +5,6 @@
 
 #include "Game.h"
 #include <iostream>
-#include <time.h>
-#include <fstream>
-#include <vector>
 
 /// <summary>
 /// default constructor
@@ -100,45 +97,45 @@ void Game::processEvents()
 /// <param name="t_event">key press event</param>
 void Game::processKeys(sf::Event t_event)
 {
-	if (sf::Keyboard::Enter == t_event.key.code && !enemySelected && !enemyDead)
+	if (sf::Keyboard::Enter == t_event.key.code && !enemySelected && !m_enemyDead) //SELECTS the enemy so you can fight him
 	{
 		subMenuOpen = true;
 		enemySelected = true;
 	}
 
-	if (sf::Keyboard::Enter == t_event.key.code && subMenuChecker == fight)
+	if (sf::Keyboard::Enter == t_event.key.code && m_subMenuChecker == fight) //Opens the Fight menu
 	{
 		fightMenu = true;
 		subMenuOpen = false;
 	}
-	else if (sf::Keyboard::Enter == t_event.key.code && subMenuChecker == magic)
+	else if (sf::Keyboard::Enter == t_event.key.code && m_subMenuChecker == magic) //Opens the magic menu
 	{
 		magicMenu = true;
 		subMenuOpen = false;
 	}
 
-	if (sf::Keyboard::Enter == t_event.key.code && fightMenuChecker == stab)
+	if (sf::Keyboard::Enter == t_event.key.code && m_fightMenuChecker == stab) //Initiate Stab Attack
 	{
 		playerAttack();
 	}
-	if (sf::Keyboard::Enter == t_event.key.code && fightMenuChecker == crush)
+	if (sf::Keyboard::Enter == t_event.key.code && m_fightMenuChecker == crush) //Initiate Crush Attack
 	{
 		playerAttack();
 	}
 
-	if (sf::Keyboard::Escape == t_event.key.code && currentState == battle )
+	if (sf::Keyboard::Escape == t_event.key.code && currentState == battle ) //Brings back to first menu
 	{
 		subMenuOpen = true;
 	}
 
-	if (sf::Keyboard::Up == t_event.key.code && currentState == battle && !enemyDead)
+	if (sf::Keyboard::Up == t_event.key.code && currentState == battle && !m_enemyDead) //Decreases choice 
 	{
-		currentChoice = currentChoice--;
+		m_currentChoice = m_currentChoice--;
 		optionSelect();
 	}
-	if (sf::Keyboard::Down == t_event.key.code && currentState == battle && !enemyDead)
+	if (sf::Keyboard::Down == t_event.key.code && currentState == battle && !m_enemyDead) //Increases choice
 	{
-		currentChoice = currentChoice++;
+		m_currentChoice = m_currentChoice++;
 		optionSelect();
 	}
 	
@@ -147,7 +144,7 @@ void Game::processKeys(sf::Event t_event)
 	{
 		currentState = preBattle;
 	}
-	if (sf::Keyboard::E == t_event.key.code && interactHover == true)
+	if (sf::Keyboard::E == t_event.key.code && m_interactHover == true)
 	{
 		currentState = battle;
 	}
@@ -155,22 +152,22 @@ void Game::processKeys(sf::Event t_event)
 
 void Game::processMouseClick(sf::Event t_event)
 {
-	if (startHover == true)
+	if (m_startHover == true)
 	{
 		currentState = preBattle;
 	}
 
-	if (optionHover == true)
+	if (m_optionHover == true)
 	{
-		optionsOpen = true;
+		m_optionsOpen = true;
 	}
 
-	if (optionEndHover == true)
+	if (m_optionEndHover == true)
 	{
-		optionsOpen = false;
+		m_optionsOpen = false;
 	}
 
-	if (endHover == true)
+	if (m_endHover == true)
 	{
 		m_exitGame = true;
 	}
@@ -208,6 +205,11 @@ void Game::update(sf::Time t_deltaTime)
 		optionAnimate();
 	}
 
+	if (m_enemyAttackClock.getElapsedTime().asSeconds() >= 5)
+	{
+		m_enemyAttacking = false;
+	}
+
 	getMousePos();
 
 }
@@ -229,7 +231,7 @@ void Game::render()
 		m_window.draw(m_OptionButtonMessage);
 		m_window.draw(m_endButtonMessage);
 		m_window.draw(m_title);
-		if (optionsOpen == true)
+		if (m_optionsOpen == true)
 		{
 			m_window.draw(m_optionsMenuRect);
 			m_window.draw(m_resolutionDropdown);
@@ -245,7 +247,7 @@ void Game::render()
 		m_window.draw(m_npcBody);
 		m_window.draw(m_playerBody);
 		m_window.draw(m_welcomeMessage);
-		if (interactHover == true)
+		if (m_interactHover == true)
 		{
 			m_window.draw(m_interactPrompt);
 			m_window.draw(m_interactE);
@@ -268,25 +270,25 @@ void Game::render()
 			m_window.draw(m_Magic);
 			m_window.draw(m_magicText);
 		}
-		if (!subMenuOpen && subMenuChecker == fight && enemySelected)
+		if (!subMenuOpen && m_subMenuChecker == fight && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
-			if (!enemyAttacking)
+			if (!m_enemyAttacking)
 			{
 				m_window.draw(m_enemyName);
 				m_window.draw(m_playerHealthText);
 			}
-			else
+			else if (m_enemyAttacking)
 			{
-				m_window.draw(enemyAbilityText);
+				m_window.draw(m_enemyAbilityText);
 			}
 			m_window.draw(m_Fstab);
 			m_window.draw(m_FstabText);
 			m_window.draw(m_Fcrush);
 			m_window.draw(m_FcrushText);
 		}
-		else if (!subMenuOpen && subMenuChecker == magic && enemySelected)
+		else if (!subMenuOpen && m_subMenuChecker == magic && enemySelected)
 		{
 			m_window.draw(m_battleScreenRect);
 			m_window.draw(m_subMenu);
@@ -333,10 +335,10 @@ void Game::setupSprite()
 
 void Game::getMousePos()
 {
-	mousePos = sf::Mouse::getPosition(m_window);
-	float mouseX = mousePos.x;
-	float mouseY = mousePos.y;
-	mousePosF = sf::Vector2f(mouseX, mouseY);
+	m_mousePos = sf::Mouse::getPosition(m_window);
+	float mouseX = m_mousePos.x;
+	float mouseY = m_mousePos.y;
+	m_mousePosF = sf::Vector2f(mouseX, mouseY);
 }
 
 void Game::setupMenu()
@@ -401,45 +403,45 @@ void Game::setupMenu()
 
 void Game::checkButtons()
 {
-	if (m_startSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	if (m_startSprite.getGlobalBounds().contains(m_mousePosF) && !m_optionsOpen)
 	{
-		startHover = true;
+		m_startHover = true;
 		m_startSprite.setColor(sf::Color(106, 106, 106, 255));
 	}
-	else if (!m_startSprite.getGlobalBounds().contains(mousePosF))
+	else if (!m_startSprite.getGlobalBounds().contains(m_mousePosF))
 	{
-		startHover = false;
+		m_startHover = false;
 		m_startSprite.setColor(sf::Color::White);
 	}
 
-	if (m_optionSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	if (m_optionSprite.getGlobalBounds().contains(m_mousePosF) && !m_optionsOpen)
 	{
-		optionHover = true;
+		m_optionHover = true;
 		m_optionSprite.setColor(sf::Color(106, 106, 106, 255));
 	}
-	else if (!m_optionSprite.getGlobalBounds().contains(mousePosF))
+	else if (!m_optionSprite.getGlobalBounds().contains(m_mousePosF))
 	{
-		optionHover = false;
+		m_optionHover = false;
 		m_optionSprite.setColor(sf::Color::White);
 	}
 
-	if (m_optionCloseText.getGlobalBounds().contains(mousePosF))
+	if (m_optionCloseText.getGlobalBounds().contains(m_mousePosF))
 	{
-		optionEndHover = true;
+		m_optionEndHover = true;
 	}
-	else if (!m_optionCloseText.getGlobalBounds().contains(mousePosF))
+	else if (!m_optionCloseText.getGlobalBounds().contains(m_mousePosF))
 	{
-		optionEndHover = false;
+		m_optionEndHover = false;
 	}
 
-	if (m_endSprite.getGlobalBounds().contains(mousePosF) && !optionsOpen)
+	if (m_endSprite.getGlobalBounds().contains(m_mousePosF) && !m_optionsOpen)
 	{
-		endHover = true;
+		m_endHover = true;
 		m_endSprite.setColor(sf::Color(106, 106, 106, 255));
 	}
-	else if (!m_endSprite.getGlobalBounds().contains(mousePosF))
+	else if (!m_endSprite.getGlobalBounds().contains(m_mousePosF))
 	{
-		endHover = false;
+		m_endHover = false;
 		m_endSprite.setColor(sf::Color::White);
 	}
 
@@ -591,13 +593,13 @@ void Game::interactWith()
 {
 	if (m_playerBody.getGlobalBounds().intersects(m_npcBody.getGlobalBounds()))
 	{
-		interactHover = true;
+		m_interactHover = true;
 		m_interactPrompt.setPosition(m_location - m_interactOffset);
 		m_interactE.setPosition(m_location - m_interactOffset);
 	}
 	else
 	{
-		interactHover = false;
+		m_interactHover = false;
 	}
 }
 
@@ -605,10 +607,10 @@ void Game::interactWith()
 //BATTLE FUNCTIONS
 void Game::failsafe() // MAKES SURE NO BUTTONS CAN BE CLICKED SOMEHOW WHEN GAME STATE CHANGES.
 {
-	startHover = false;
-	optionHover = false;
-	optionEndHover = false;
-	endHover = false;
+	m_startHover = false;
+	m_optionHover = false;
+	m_optionEndHover = false;
+	m_endHover = false;
 }
 
 void Game::setupEnemy()
@@ -674,11 +676,11 @@ void Game::setupBattleMenu()
 
 	m_playerHealthText.setFont(m_ArialBlackfont);
 	m_playerHealthText.setCharacterSize(50u);
-	m_playerHealthText.setString("PLAYER HP: " + std::to_string(playerHealth));
+	m_playerHealthText.setString("PLAYER HP: " + std::to_string(m_playerHealth));
 	m_playerHealthText.setPosition(m_battleScreenRect.getPosition().x + 400, m_battleScreenRect.getPosition().y + 10);
 
 	m_enemyHealthRect.setFillColor(sf::Color::Green);
-	m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 70));
+	m_enemyHealthRect.setSize(sf::Vector2f(m_enemyHealth * 5, 70));
 	m_enemyHealthRect.setOrigin(m_enemyHealthRect.getLocalBounds().width / 2,m_enemyHealthRect.getLocalBounds().height / 2);
 	m_enemyHealthRect.setPosition(m_enemyPlaceholderSprite.getPosition().x, m_enemyPlaceholderSprite.getPosition().y - 375);
 
@@ -702,18 +704,19 @@ void Game::setupBattleMenu()
 	m_FcrushText.setOrigin(m_FcrushText.getLocalBounds().width / 2, m_FcrushText.getLocalBounds().height / 2);
 	m_FcrushText.setPosition(m_Fcrush.getPosition().x + 331.5f, m_Fcrush.getPosition().y + 37);
 
-	enemyAbilityText.setFont(m_ArialBlackfont);
-	enemyAbilityText.setPosition(m_battleScreenRect.getPosition());
+	m_enemyAbilityText.setFont(m_ArialBlackfont);
+	m_enemyAbilityText.setPosition(m_battleScreenRect.getPosition());
+	m_enemyAbilityText.setCharacterSize(51u);
 }
 
 void Game::enemySelect()
 {
-	if (enemyNum == 0)
+	if (m_enemyNum == 0)
 	{
-		if (!enemySelected && !enemyDead)
+		if (!enemySelected && !m_enemyDead)
 		{
-			blueValue = blueValue + 15;
-			m_enemyPlaceholderSprite.setColor(sf::Color(255, 255, blueValue, 255));
+			m_blueValue = m_blueValue + 15;
+			m_enemyPlaceholderSprite.setColor(sf::Color(255, 255, m_blueValue, 255));
 		}
 		else if (enemySelected)
 		{
@@ -729,38 +732,38 @@ void Game::enemySelect()
 
 void Game::optionSelect()
 {
-	if (currentChoice < 0 )
+	if (m_currentChoice < 0 )
 	{
-		currentChoice = 1;
+		m_currentChoice = 1;
 	}
-	else if (currentChoice > 1)
+	else if (m_currentChoice > 1)
 	{
-		currentChoice = 0;
+		m_currentChoice = 0;
 	}
 
-	std::cout << currentChoice << std::endl;
+	std::cout << m_currentChoice << std::endl;
 
 	if (subMenuOpen)
 	{
-		switch (currentChoice)
+		switch (m_currentChoice)
 		{
 		case 0:
-			subMenuChecker = fight;
+			m_subMenuChecker = fight;
 			break;
 		case 1:
-			subMenuChecker = magic;
+			m_subMenuChecker = magic;
 			break;
 		}
 	}
 	else if (fightMenu)
 	{
-		switch (currentChoice)
+		switch (m_currentChoice)
 		{
 		case 0:
-			fightMenuChecker = stab;
+			m_fightMenuChecker = stab;
 			break;
 		case 1:
-			fightMenuChecker = crush;
+			m_fightMenuChecker = crush;
 			break;
 		}
 	}
@@ -769,7 +772,7 @@ void Game::optionSelect()
 
 void Game::optionAnimate()
 {
-	if (subMenuChecker == fight)
+	if (m_subMenuChecker == fight)
 	{
 		m_Fight.setFillColor(sf::Color(106, 106, 106, 255));
 	}
@@ -778,7 +781,7 @@ void Game::optionAnimate()
 		m_Fight.setFillColor(sf::Color::Blue);
 	}
 
-	if (subMenuChecker == magic)
+	if (m_subMenuChecker == magic)
 	{
 		m_Magic.setFillColor(sf::Color(106, 106, 106, 255));
 	}
@@ -788,7 +791,7 @@ void Game::optionAnimate()
 	}
 
 
-	if (fightMenuChecker == stab)
+	if (m_fightMenuChecker == stab)
 	{
 		m_Fstab.setFillColor(sf::Color(106, 106, 106, 255));
 	}
@@ -796,7 +799,7 @@ void Game::optionAnimate()
 	{
 		m_Fstab.setFillColor(sf::Color::Blue);
 	}
-	if (fightMenuChecker == crush)
+	if (m_fightMenuChecker == crush)
 	{
 		m_Fcrush.setFillColor(sf::Color(106, 106, 106, 255));
 	}
@@ -808,34 +811,35 @@ void Game::optionAnimate()
 
 void Game::playerAttack()
 {
-	if (enemyHealth > 0)
+	if (m_enemyHealth > 0)
 	{
-		enemyHealth = enemyHealth - 15;
+		m_enemyHealth = m_enemyHealth - 15;
 	}
-	else if (enemyHealth < 0)
+	else if (m_enemyHealth < 0)
 	{
-		enemyHealth = 0;
+		m_enemyHealth = 0;
 		enemySelected = false;
-		enemyDead = true;
-		subMenuChecker = NONE;
-		fightMenuChecker = pacifist;
+		m_enemyDead = true;
+		m_subMenuChecker = NONE;
+		m_fightMenuChecker = pacifist;
 	}
-	m_enemyHealthRect.setSize(sf::Vector2f(enemyHealth * 5, 75));
+	m_enemyHealthRect.setSize(sf::Vector2f(m_enemyHealth * 5, 75));
 
 	enemyTurn();
 }
 
 void Game::enemyTurn()
 {
-	enemyAttacking = true;
+	m_enemyAttacking = true;
 	enemyAttack();
 }
 
 void Game::enemyAttack()
 {
-	enemyAbilityText.setString("SLASH");
-	playerHealth = playerHealth - 10;
-	m_playerHealthText.setString("PLAYER HP: " + std::to_string(playerHealth));
+	m_enemyAbilityText.setString("SANS USES SLASH!");
+	m_playerHealth = m_playerHealth - 10;
+	m_playerHealthText.setString("PLAYER HP: " + std::to_string(m_playerHealth));
+	m_enemyAttackClock.restart();
 }
 
 
