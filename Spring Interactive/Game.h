@@ -205,6 +205,7 @@ private:
 
 	int m_enemyHealth{ 100 };
 	sf::RectangleShape m_enemyHealthRect;
+	sf::RectangleShape m_enemyHealthRectDamage;
 
 	int m_playerHealth{ 100 };
 	sf::Text m_playerHealthText;

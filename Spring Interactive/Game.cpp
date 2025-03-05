@@ -271,6 +271,7 @@ void Game::render()
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_battleBackgroundSprite);
 		m_window.draw(m_enemyPlaceholderSprite);
+		m_window.draw(m_enemyHealthRectDamage);
 		m_window.draw(m_enemyHealthRect);
 		if (subMenuOpen == true && enemySelected)
 		{
@@ -634,7 +635,7 @@ void Game::setupEnemy()
 	}
 	m_enemyPlaceholderSprite.setTexture(m_enemyPlaceholderTexture);
 
-	m_enemyPos = sf::Vector2f(screenWidth / 2, screenHeight / 2);
+	m_enemyPos = sf::Vector2f(screenWidth / 2, (screenHeight / 2) + 50);
 
 	m_enemyPlaceholderSprite.setOrigin(m_enemyPlaceholderSprite.getLocalBounds().width / 2, m_enemyPlaceholderSprite.getLocalBounds().height / 2);
 	m_enemyPlaceholderSprite.setScale(0.5,0.5);
@@ -643,7 +644,7 @@ void Game::setupEnemy()
 
 void Game::setupBattleMenu()
 {
-	if (!m_battleBackgroundTexture.loadFromFile("ASSETS//IMAGES//dune.jpg"))
+	if (!m_battleBackgroundTexture.loadFromFile("ASSETS//IMAGES//dune.png"))
 	{
 		std::cout << "bug with dune file" << std::endl;
 	}
@@ -692,7 +693,16 @@ void Game::setupBattleMenu()
 	m_playerHealthText.setString("PLAYER HP: " + std::to_string(m_playerHealth));
 	m_playerHealthText.setPosition(m_battleScreenRect.getPosition().x + 400, m_battleScreenRect.getPosition().y + 10);
 
+	m_enemyHealthRectDamage.setFillColor(sf::Color::Red);
+	m_enemyHealthRectDamage.setOutlineColor(sf::Color::Black);
+	m_enemyHealthRectDamage.setOutlineThickness(5);
+	m_enemyHealthRectDamage.setSize(sf::Vector2f(m_enemyHealth * 5, 70));
+	m_enemyHealthRectDamage.setOrigin(m_enemyHealthRectDamage.getLocalBounds().width / 2, m_enemyHealthRectDamage.getLocalBounds().height / 2);
+	m_enemyHealthRectDamage.setPosition(m_enemyPlaceholderSprite.getPosition().x, m_enemyPlaceholderSprite.getPosition().y - 375);
+
 	m_enemyHealthRect.setFillColor(sf::Color::Green);
+	m_enemyHealthRect.setOutlineColor(sf::Color::Black);
+	m_enemyHealthRect.setOutlineThickness(5);
 	m_enemyHealthRect.setSize(sf::Vector2f(m_enemyHealth * 5, 70));
 	m_enemyHealthRect.setOrigin(m_enemyHealthRect.getLocalBounds().width / 2,m_enemyHealthRect.getLocalBounds().height / 2);
 	m_enemyHealthRect.setPosition(m_enemyPlaceholderSprite.getPosition().x, m_enemyPlaceholderSprite.getPosition().y - 375);
@@ -836,7 +846,7 @@ void Game::playerAttack()
 		m_subMenuChecker = NONE;
 		m_fightMenuChecker = pacifist;
 	}
-	m_enemyHealthRect.setSize(sf::Vector2f(m_enemyHealth * 5, 75));
+	m_enemyHealthRect.setSize(sf::Vector2f(m_enemyHealth * 5, m_enemyHealthRect.getSize().y));
 
 	enemyTurn();
 }
