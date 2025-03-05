@@ -279,10 +279,6 @@ void Game::render()
 		{
 			m_window.draw(m_sansInjuredHead);
 		}
-		else
-		{
-			m_window.draw(m_sansDefaultHead);
-		}
 		m_window.draw(m_enemyHealthRectDamage);
 		m_window.draw(m_enemyHealthRect);
 		if (subMenuOpen == true && enemySelected)
@@ -647,7 +643,6 @@ void Game::setupEnemy()
 	}
 	m_enemyPlaceholderSprite.setTexture(m_sansSpriteSheetTexture);
 	m_sansInjuredHead.setTexture(m_sansSpriteSheetTexture);
-	m_sansDefaultHead.setTexture(m_sansSpriteSheetTexture);
 
 	m_enemyPos = sf::Vector2f(screenWidth / 2, (screenHeight / 2) + 50);
 
@@ -659,6 +654,8 @@ void Game::setupEnemy()
 	m_sansInjuredHead.setTextureRect(sf::IntRect(1008, 130, 1151, 271));
 	m_sansInjuredHead.setScale(3, 3);
 	m_sansInjuredHead.setPosition(m_enemyPos - sf::Vector2f(213, 400));
+
+
 }
 
 void Game::setupBattleMenu()
