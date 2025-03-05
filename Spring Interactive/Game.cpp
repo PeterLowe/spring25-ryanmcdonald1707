@@ -151,9 +151,11 @@ void Game::processKeys(sf::Event t_event)
 	{
 		currentState = preBattle;
 	}
+
 	if (sf::Keyboard::E == t_event.key.code && m_interactHover == true)
 	{
 		currentState = battle;
+		m_musicPlaying = false;
 	}
 }
 
@@ -162,6 +164,7 @@ void Game::processMouseClick(sf::Event t_event)
 	if (m_startHover == true)
 	{
 		currentState = preBattle;
+		m_musicPlaying = false;
 	}
 
 	if (m_optionHover == true)
@@ -888,13 +891,21 @@ void Game::enemyAttack()
 
 bool Game::loadMusic()
 {
-	if (!m_menuMusic.openFromFile("ASSETS//AUDIO//MENUMUSIC.wav"))
+	if (!m_menuMusic.openFromFile("ASSETS//AUDIO//MENUMUSIC.wav")
+		|| !m_preBattleMusic.openFromFile("ASSETS//AUDIO//PREBATTLE.wav")
+		|| !m_fightMusic.openFromFile("ASSETS//AUDIO//FIGHT.wav"));
 	{
 		return false;
 	}
 
 	m_menuMusic.setLoop(true);
 	m_menuMusic.setVolume(75);
+
+	m_preBattleMusic.setLoop(true);
+	m_menuMusic.setVolume(75);
+
+	m_fightMusic.setLoop(true);
+	m_fightMusic.setVolume(75);
 
 	return true;
 }
@@ -906,6 +917,17 @@ void Game::playMusic()
 		case menu:
 			m_menuMusic.play();
 			m_musicPlaying = true;
+			break;
+		case preBattle:
+			m_menuMusic.stop();
+			m_preBattleMusic.play();
+			m_musicPlaying = true;
+			break;
+		case battle:
+			m_fightMusic.play();
+			m_preBattleMusic.stop();
+			m_musicPlaying = true;
+			break;
 	}
 
 }

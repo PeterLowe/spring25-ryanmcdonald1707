@@ -238,6 +238,8 @@ private:
 
 	//MUSIC AND SOUND EFFECTS
 	sf::Music m_menuMusic;
+	sf::Music m_preBattleMusic;
+	sf::Music m_fightMusic;
 	bool m_musicPlaying = false;
 };
 
