@@ -132,6 +132,7 @@ void Game::processKeys(sf::Event t_event)
 	if (sf::Keyboard::Escape == t_event.key.code && currentState == battle ) //Brings back to first menu
 	{
 		subMenuOpen = true;
+		m_fightMenuChecker = pacifist;
 	}
 
 	if (sf::Keyboard::Up == t_event.key.code && currentState == battle && !m_enemyDead) //Decreases choice 
@@ -323,7 +324,7 @@ void Game::render()
 /// </summary>
 void Game::setupFontAndText()
 {
-	if (!m_ArialBlackfont.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
+	if (!m_ArialBlackfont.loadFromFile("ASSETS\\FONTS\\chara.ttf"))
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
@@ -658,23 +659,29 @@ void Game::setupBattleMenu()
 
 	m_subMenu.setPosition(1200.0f, 610.0f);
 	m_subMenu.setSize(sf::Vector2f(700.0f, 375.0f));
-	m_subMenu.setFillColor(sf::Color::Red);
+	m_subMenu.setFillColor(sf::Color::Black);
 
 	m_Fight.setPosition(1220.0f, 615.0f);
 	m_Fight.setSize(sf::Vector2f(663.0f, 100.0f));
-	m_Fight.setFillColor(sf::Color::Blue);
+	m_Fight.setFillColor(sf::Color::Black);
+	m_Fight.setOutlineColor(sf::Color(255, 165, 0, 255));
+	m_Fight.setOutlineThickness(4);
 
 	m_Magic.setPosition(1220.0f, 745.0f);
 	m_Magic.setSize(sf::Vector2f(663.0f, 100.0f));
-	m_Magic.setFillColor(sf::Color::Blue);
+	m_Magic.setFillColor(sf::Color::Black);
+	m_Magic.setOutlineColor(sf::Color(255, 165, 0, 255));
+	m_Magic.setOutlineThickness(4);
 
 	m_fightText.setFont(m_ArialBlackfont);
+	m_fightText.setFillColor(sf::Color(255, 165, 0, 255));
 	m_fightText.setString("FIGHT");
 	m_fightText.setCharacterSize(51u);
 	m_fightText.setOrigin(m_fightText.getLocalBounds().width / 2, m_fightText.getLocalBounds().height / 2);
 	m_fightText.setPosition(m_Fight.getPosition().x + 331.5f, m_Fight.getPosition().y + 37);
 
 	m_magicText.setFont(m_ArialBlackfont);
+	m_magicText.setFillColor(sf::Color(255, 165, 0, 255));
 	m_magicText.setString("MAGIC");
 	m_magicText.setCharacterSize(51u);
 	m_magicText.setOrigin(m_magicText.getLocalBounds().width / 2, m_magicText.getLocalBounds().height / 2);
@@ -709,20 +716,24 @@ void Game::setupBattleMenu()
 
 	m_Fstab.setPosition(1220.0f, 615.0f);
 	m_Fstab.setSize(sf::Vector2f(663.0f, 100.0f));
-	m_Fstab.setFillColor(sf::Color::Blue);
+	m_Fstab.setFillColor(sf::Color::Black);
+	m_Fstab.setOutlineThickness(4);
 
 	m_FstabText.setFont(m_ArialBlackfont);
 	m_FstabText.setString("STAB");
+	m_FstabText.setFillColor(sf::Color(255, 165, 0));
 	m_FstabText.setCharacterSize(51u);
 	m_FstabText.setOrigin(m_FstabText.getLocalBounds().width / 2, m_FstabText.getLocalBounds().height / 2);
 	m_FstabText.setPosition(m_Fstab.getPosition().x + 331.5f, m_Fstab.getPosition().y + 37);
 
 	m_Fcrush.setPosition(1220.0f, 745.0f);
 	m_Fcrush.setSize(sf::Vector2f(663.0f, 100.0f));
-	m_Fcrush.setFillColor(sf::Color::Blue);
+	m_Fcrush.setFillColor(sf::Color::Black);
+	m_Fcrush.setOutlineThickness(4);
 
 	m_FcrushText.setFont(m_ArialBlackfont);
 	m_FcrushText.setString("CRUSH");
+	m_FcrushText.setFillColor(sf::Color(255, 165, 0));
 	m_FcrushText.setCharacterSize(51u);
 	m_FcrushText.setOrigin(m_FcrushText.getLocalBounds().width / 2, m_FcrushText.getLocalBounds().height / 2);
 	m_FcrushText.setPosition(m_Fcrush.getPosition().x + 331.5f, m_Fcrush.getPosition().y + 37);
@@ -797,38 +808,47 @@ void Game::optionAnimate()
 {
 	if (m_subMenuChecker == fight)
 	{
-		m_Fight.setFillColor(sf::Color(106, 106, 106, 255));
+		m_Fight.setOutlineColor(sf::Color::Yellow);
+		m_fightText.setFillColor(sf::Color::Yellow);
 	}
 	else
 	{
-		m_Fight.setFillColor(sf::Color::Blue);
+		m_Fight.setOutlineColor(sf::Color(255, 165, 0));
+		m_fightText.setFillColor(sf::Color(255, 165, 0));
 	}
 
 	if (m_subMenuChecker == magic)
 	{
-		m_Magic.setFillColor(sf::Color(106, 106, 106, 255));
+		m_Magic.setOutlineColor(sf::Color::Yellow);
+		m_magicText.setFillColor(sf::Color::Yellow);
 	}
 	else
 	{
-		m_Magic.setFillColor(sf::Color::Blue);
+		m_Magic.setOutlineColor(sf::Color(255, 165, 0));
+		m_magicText.setFillColor(sf::Color(255, 165, 0));
 	}
 
 
 	if (m_fightMenuChecker == stab)
 	{
-		m_Fstab.setFillColor(sf::Color(106, 106, 106, 255));
+		m_Fstab.setOutlineColor(sf::Color::Yellow);
+		m_FstabText.setFillColor(sf::Color::Yellow);
 	}
 	else
 	{
-		m_Fstab.setFillColor(sf::Color::Blue);
+		m_Fstab.setOutlineColor(sf::Color(255, 165, 0));
+		m_FstabText.setFillColor(sf::Color(255, 165, 0));
 	}
+
 	if (m_fightMenuChecker == crush)
 	{
-		m_Fcrush.setFillColor(sf::Color(106, 106, 106, 255));
+		m_Fcrush.setOutlineColor(sf::Color::Yellow);
+		m_FcrushText.setFillColor(sf::Color::Yellow);
 	}
 	else
 	{
-		m_Fcrush.setFillColor(sf::Color::Blue);
+		m_Fcrush.setOutlineColor(sf::Color(255, 165, 0));
+		m_FcrushText.setFillColor(sf::Color(255, 165, 0));
 	}
 }
 

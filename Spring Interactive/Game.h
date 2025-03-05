@@ -11,6 +11,9 @@
 /// </summary>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Event.hpp>
 #include <time.h>
 
 enum Direction
