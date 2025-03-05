@@ -275,6 +275,14 @@ void Game::render()
 		m_window.clear(sf::Color::White);
 		m_window.draw(m_battleBackgroundSprite);
 		m_window.draw(m_enemyPlaceholderSprite);
+		if (m_enemyHealth < 50)
+		{
+			m_window.draw(m_sansInjuredHead);
+		}
+		else
+		{
+			m_window.draw(m_sansDefaultHead);
+		}
 		m_window.draw(m_enemyHealthRectDamage);
 		m_window.draw(m_enemyHealthRect);
 		if (subMenuOpen == true && enemySelected)
@@ -633,17 +641,24 @@ void Game::failsafe() // MAKES SURE NO BUTTONS CAN BE CLICKED SOMEHOW WHEN GAME 
 
 void Game::setupEnemy()
 {
-	if (!m_enemyPlaceholderTexture.loadFromFile("ASSETS//IMAGES//SansEnemy.png"))
+	if (!m_sansSpriteSheetTexture.loadFromFile("ASSETS//IMAGES//SansSpriteSheet.png"))
 	{
 		std::cout << "URUuruURUruURUruRUuUuru" << std::endl;
 	}
-	m_enemyPlaceholderSprite.setTexture(m_enemyPlaceholderTexture);
+	m_enemyPlaceholderSprite.setTexture(m_sansSpriteSheetTexture);
+	m_sansInjuredHead.setTexture(m_sansSpriteSheetTexture);
+	m_sansDefaultHead.setTexture(m_sansSpriteSheetTexture);
 
 	m_enemyPos = sf::Vector2f(screenWidth / 2, (screenHeight / 2) + 50);
 
-	m_enemyPlaceholderSprite.setOrigin(m_enemyPlaceholderSprite.getLocalBounds().width / 2, m_enemyPlaceholderSprite.getLocalBounds().height / 2);
-	m_enemyPlaceholderSprite.setScale(0.5,0.5);
+	m_enemyPlaceholderSprite.setOrigin(170, 185);
+	m_enemyPlaceholderSprite.setScale(3,3);
+	m_enemyPlaceholderSprite.setTextureRect(sf::IntRect(0, 0, 348, 335));
 	m_enemyPlaceholderSprite.setPosition(m_enemyPos);
+
+	m_sansInjuredHead.setTextureRect(sf::IntRect(1008, 130, 1151, 271));
+	m_sansInjuredHead.setScale(3, 3);
+	m_sansInjuredHead.setPosition(m_enemyPos - sf::Vector2f(213, 400));
 }
 
 void Game::setupBattleMenu()
@@ -660,17 +675,17 @@ void Game::setupBattleMenu()
 	m_battleScreenRect.setSize(sf::Vector2f(1920.0f, 400.0f));
 	m_battleScreenRect.setFillColor(sf::Color::Black);
 
-	m_subMenu.setPosition(1200.0f, 610.0f);
+	m_subMenu.setPosition(1000.0f, 610.0f);
 	m_subMenu.setSize(sf::Vector2f(700.0f, 375.0f));
 	m_subMenu.setFillColor(sf::Color::Black);
 
-	m_Fight.setPosition(1220.0f, 615.0f);
+	m_Fight.setPosition(1000.0f, 615.0f);
 	m_Fight.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Fight.setFillColor(sf::Color::Black);
 	m_Fight.setOutlineColor(sf::Color(255, 165, 0, 255));
 	m_Fight.setOutlineThickness(4);
 
-	m_Magic.setPosition(1220.0f, 745.0f);
+	m_Magic.setPosition(1000.0f, 745.0f);
 	m_Magic.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Magic.setFillColor(sf::Color::Black);
 	m_Magic.setOutlineColor(sf::Color(255, 165, 0, 255));
@@ -717,7 +732,7 @@ void Game::setupBattleMenu()
 	m_enemyHealthRect.setOrigin(m_enemyHealthRect.getLocalBounds().width / 2,m_enemyHealthRect.getLocalBounds().height / 2);
 	m_enemyHealthRect.setPosition(m_enemyPlaceholderSprite.getPosition().x, m_enemyPlaceholderSprite.getPosition().y - 375);
 
-	m_Fstab.setPosition(1220.0f, 615.0f);
+	m_Fstab.setPosition(1000.0f, 615.0f);
 	m_Fstab.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Fstab.setFillColor(sf::Color::Black);
 	m_Fstab.setOutlineThickness(4);
@@ -729,7 +744,7 @@ void Game::setupBattleMenu()
 	m_FstabText.setOrigin(m_FstabText.getLocalBounds().width / 2, m_FstabText.getLocalBounds().height / 2);
 	m_FstabText.setPosition(m_Fstab.getPosition().x + 331.5f, m_Fstab.getPosition().y + 37);
 
-	m_Fcrush.setPosition(1220.0f, 745.0f);
+	m_Fcrush.setPosition(1000.0f, 745.0f);
 	m_Fcrush.setSize(sf::Vector2f(663.0f, 100.0f));
 	m_Fcrush.setFillColor(sf::Color::Black);
 	m_Fcrush.setOutlineThickness(4);

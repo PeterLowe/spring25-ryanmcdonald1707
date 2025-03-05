@@ -122,7 +122,7 @@ private:
 
 	sf::Vector2i m_mousePos;
 	sf::Vector2f m_mousePosF;
-
+	
 	//TEXTURES, SPRITES, AND VARIABLES FOR MENU
 
 	bool m_startHover = false; //IF HOVERING OVER BUTTON, CAN CLICK.
@@ -178,7 +178,7 @@ private:
 	sf::Texture m_battleBackgroundTexture;
 	sf::Sprite m_battleBackgroundSprite;
 
-	sf::Texture m_enemyPlaceholderTexture;
+	sf::Texture m_sansSpriteSheetTexture;
 	sf::Sprite m_enemyPlaceholderSprite;
 	sf::Text m_enemyName;
 
@@ -241,6 +241,10 @@ private:
 	sf::Music m_preBattleMusic;
 	sf::Music m_fightMusic;
 	bool m_musicPlaying = false;
+
+	//BATTLE ANIMATION SPRITES
+	sf::Sprite m_sansInjuredHead;
+	sf::Sprite m_sansDefaultHead;
 };
 
 #endif // !GAME_HPP
