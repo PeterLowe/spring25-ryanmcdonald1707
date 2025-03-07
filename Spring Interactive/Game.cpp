@@ -21,6 +21,7 @@ Game::Game() :
 	setupMenu();
 	setupPlayer();
 	setupNPC();
+	setupSnowdin();
 	setupButtons();
 	setupEnemy();
 	setupBattleMenu();
@@ -260,7 +261,7 @@ void Game::render()
 	else if(currentState == preBattle)
 	{
 		m_window.clear(sf::Color::White);
-		m_window.draw(m_backgroundSprite);
+		drawEnvironment();
 		m_window.draw(m_npcBody);
 		m_window.draw(m_playerBody);
 		m_window.draw(m_welcomeMessage);
@@ -484,6 +485,33 @@ void Game::setupNPC()
 	m_npcBody.setPosition(m_npcLocation);
 }
 
+void Game::setupSnowdin()
+{
+	int ROWS;
+	int COLS;
+
+	if (!m_snowdinSpritesheet.loadFromFile("ASSETS//IMAGES//snowdinSpriteSheet.png"))
+	{
+		std::cout << "Issue loading Snowdin Textures" << std::endl; 
+	}
+
+	m_snowTileSprite.setTexture(m_snowdinSpritesheet);
+	m_snowTileSprite.setTextureRect(sf::IntRect(190, 22, 19, 20));
+	m_snowTileSprite.setScale(5.0f,5.0f);
+	
+	for (int y = 0; y < 10;)
+	{
+		for (ROWS; ROWS < 40; ROWS++)
+		{
+			sf::Sprite newFloorTile(m_snowTileSprite);
+			newFloorTile.setPosition(m_oldFloorLocation);
+			m_oldFloorLocation = sf::Vector2f(newFloorTile.getPosition().x + 50, newFloorTile.getPosition().y);
+			snowdinSprites.push_back(newFloorTile);
+			y++;
+		}
+	}
+}
+
 void Game::setupButtons()
 {
 	m_interactPrompt.setSize(sf::Vector2f(25.0f, 25.0f));
@@ -494,6 +522,14 @@ void Game::setupButtons()
 	m_interactE.setFont(m_ArialBlackfont);
 	m_interactE.setString("E");
 	m_interactE.setOrigin(-9.5f, 5.5f);
+}
+
+void Game::drawEnvironment()
+{
+	for (const auto ft : snowdinSprites)
+	{
+		m_window.draw(ft);
+	}
 }
 
 void Game::getDirection()

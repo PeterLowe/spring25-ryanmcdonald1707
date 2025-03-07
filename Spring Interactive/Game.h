@@ -91,7 +91,10 @@ private:
 	//FUNCTIONS FOR PREBATTLE
 	void setupPlayer();
 	void setupNPC();
+	void setupSnowdin();
 	void setupButtons();
+	void drawEnvironment();
+
 	void getDirection();
 	void move();
 	void checkbounds();
@@ -241,6 +244,15 @@ private:
 	sf::Music m_preBattleMusic;
 	sf::Music m_fightMusic;
 	bool m_musicPlaying = false;
+
+	//PREBATTLE ANIMATIONS AND SPRITES
+	std::vector<sf::Sprite> snowdinSprites;
+	int tileOffset{ 0 };
+	sf::Vector2f m_oldFloorLocation{};
+	sf::Vector2f m_newFloorLocation{};
+
+	sf::Texture m_snowdinSpritesheet;
+	sf::Sprite m_snowTileSprite;
 
 	//BATTLE ANIMATION SPRITES
 	sf::Sprite m_sansInjuredHead;
